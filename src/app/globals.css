@@ -1,9 +1,6 @@
 @import "tailwindcss";
 
-:root {
-  --background: #fef7ed;
-  --foreground: #78350f;
-}
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&family=Inter:wght@400;500;600&display=swap');
 
 @theme inline {
   --color-background: var(--background);
@@ -21,8 +18,78 @@
   --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.08);
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer base {
+  body {
+    font-family: 'Inter', 'Noto Serif SC', sans-serif;
+  }
+  article {
+    font-family: 'Noto Serif SC', serif;
+    line-height: 1.8;
+    font-size: 1.05rem;
+  }
+  article h1, article h2, article h3 {
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    margin-top: 1.5em;
+    margin-bottom: 0.5em;
+  }
+  article h2 { font-size: 1.5rem; color: #78350f; }
+  article h3 { font-size: 1.25rem; color: #92400e; }
+  article p { margin-bottom: 1em; }
+  article code {
+    background: #fef3c7;
+    padding: 0.15em 0.4em;
+    border-radius: 0.25rem;
+    font-size: 0.9em;
+    font-family: 'Fira Code', monospace;
+  }
+  article pre {
+    background: #1e1e1e;
+    color: #d4d4d4;
+    padding: 1.25rem;
+    border-radius: 0.75rem;
+    overflow-x: auto;
+    margin: 1rem 0;
+    font-size: 0.9rem;
+  }
+  article pre code {
+    background: none;
+    padding: 0;
+    color: inherit;
+  }
+  article blockquote {
+    border-left: 3px solid #f5d0a9;
+    padding-left: 1rem;
+    color: #92400e;
+    font-style: italic;
+    margin: 1rem 0;
+  }
+  article a {
+    color: #d97706;
+    text-decoration: underline;
+  }
+  article img {
+    border-radius: 0.75rem;
+    max-width: 100%;
+    margin: 1rem 0;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-warm-accent text-white px-6 py-2 rounded-lg font-medium
+           hover:bg-warm-muted transition-colors disabled:opacity-50;
+  }
+  .btn-secondary {
+    @apply border border-warm-border text-warm-text px-6 py-2 rounded-lg font-medium
+           hover:bg-warm-bg transition-colors;
+  }
+  .card {
+    @apply bg-warm-card rounded-card shadow-card p-6;
+  }
+  .input-field {
+    @apply w-full border border-warm-border rounded-lg px-4 py-2
+           focus:outline-none focus:ring-2 focus:ring-warm-accent
+           bg-white text-warm-text placeholder:text-warm-muted/50;
+  }
 }
