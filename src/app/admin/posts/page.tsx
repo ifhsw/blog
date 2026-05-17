@@ -10,17 +10,17 @@ export default async function AdminPostsPage() {
   return (
     <div>
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold text-warm-text">文章管理</h1>
+        <h1 className="text-2xl font-bold text-primary-800">文章管理</h1>
         <Link href="/admin/posts/new" className="btn-primary text-sm">写文章</Link>
       </div>
       <div className="space-y-3">
         {posts.map((post) => (
           <div key={post.id} className="card flex justify-between items-center">
             <div>
-              <Link href={`/post/${post.slug}`} className="font-medium text-warm-text hover:text-warm-accent">
+              <Link href={`/post/${post.slug}`} className="font-medium text-primary-800 hover:text-primary-500">
                 {post.title}
               </Link>
-              <div className="text-xs text-warm-muted mt-1">
+              <div className="text-xs text-primary-600/60 mt-1">
                 {post.status === "DRAFT" ? "草稿" : "已发布"} · {new Date(post.createdAt).toLocaleDateString("zh-CN")}
               </div>
             </div>

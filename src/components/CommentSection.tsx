@@ -38,7 +38,7 @@ export function CommentSection({
 
   return (
     <div>
-      <h3 className="text-xl font-bold text-warm-text mb-4">评论 ({initialComments.length})</h3>
+      <h3 className="text-xl font-bold text-primary-800 mb-4">评论 ({initialComments.length})</h3>
       {nested.map((comment) => (
         <CommentItem
           key={comment.id}
@@ -69,8 +69,8 @@ export function CommentSection({
           </div>
         </form>
       ) : (
-        <p className="text-sm text-warm-muted mt-4">
-          <a href="/login" className="text-warm-link hover:underline">登录</a> 后发表评论
+        <p className="text-sm text-primary-600/60 mt-4">
+          <a href="/login" className="text-primary-500 hover:underline">登录</a> 后发表评论
         </p>
       )}
     </div>

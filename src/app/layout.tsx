@@ -16,7 +16,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="zh-CN">
-      <body className="bg-warm-bg text-warm-text min-h-screen flex flex-col">
+      <body className="bg-primary-50 text-primary-800 min-h-screen flex flex-col">
         <SessionProvider>
           <Header />
           {children}

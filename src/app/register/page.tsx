@@ -20,24 +20,24 @@ export default function RegisterPage() {
 
   return (
     <main className="max-w-md mx-auto px-4 py-20">
-      <h1 className="text-2xl font-bold text-warm-text text-center mb-8">注册</h1>
+      <h1 className="text-2xl font-bold text-primary-800 text-center mb-8">注册</h1>
       <form action={handleSubmit} className="card space-y-4">
         {error && <p className="text-red-500 text-sm text-center">{error}</p>}
         <div>
-          <label className="block text-sm font-medium text-warm-muted mb-1">用户名</label>
+          <label className="block text-sm font-medium text-primary-600/60 mb-1">用户名</label>
           <input name="username" type="text" className="input-field" required />
         </div>
         <div>
-          <label className="block text-sm font-medium text-warm-muted mb-1">邮箱</label>
+          <label className="block text-sm font-medium text-primary-600/60 mb-1">邮箱</label>
           <input name="email" type="email" className="input-field" required />
         </div>
         <div>
-          <label className="block text-sm font-medium text-warm-muted mb-1">密码</label>
+          <label className="block text-sm font-medium text-primary-600/60 mb-1">密码</label>
           <input name="password" type="password" className="input-field" minLength={6} required />
         </div>
         <button type="submit" className="btn-primary w-full">注册</button>
-        <p className="text-sm text-center text-warm-muted">
-          已有账号？<Link href="/login" className="text-warm-link hover:underline">登录</Link>
+        <p className="text-sm text-center text-primary-600/60">
+          已有账号？<Link href="/login" className="text-primary-500 hover:underline">登录</Link>
         </p>
       </form>
     </main>

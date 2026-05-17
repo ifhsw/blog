@@ -15,7 +15,7 @@ export default async function EditPostPage({ params }: { params: Promise<{ id: s
 
   return (
     <div>
-      <h1 className="text-2xl font-bold text-warm-text mb-6">编辑文章</h1>
+      <h1 className="text-2xl font-bold text-primary-800 mb-6">编辑文章</h1>
       <PostEditor
         action={bindUpdate}
         initialData={{

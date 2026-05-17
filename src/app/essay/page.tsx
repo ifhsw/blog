@@ -10,9 +10,9 @@ export default async function EssayPage() {
 
   return (
     <main className="max-w-3xl mx-auto px-4 py-8">
-      <h1 className="text-2xl font-bold text-warm-text mb-6">随笔</h1>
+      <h1 className="text-2xl font-bold text-primary-800 mb-6">随笔</h1>
       {posts.length === 0 ? (
-        <p className="text-center text-warm-muted py-20">暂无随笔文章。</p>
+        <p className="text-center text-primary-600/60 py-20">暂无随笔文章。</p>
       ) : (
         <div className="space-y-6">{posts.map((p) => <PostCard key={p.id} {...p} />)}</div>
       )}

@@ -27,16 +27,16 @@ export function CommentItem({
   depth?: number;
 }) {
   return (
-    <div className={`${depth > 0 ? "ml-6 border-l-2 border-warm-border pl-4" : ""} mb-4`}>
+    <div className={`${depth > 0 ? "ml-6 border-l-2 border-primary-200/30 pl-4" : ""} mb-4`}>
       <div className="flex items-center gap-2 text-sm mb-1">
-        <span className="font-medium text-warm-text">{comment.user.username}</span>
-        <span className="text-warm-muted/60 text-xs">
+        <span className="font-medium text-primary-800">{comment.user.username}</span>
+        <span className="text-primary-600/60 text-xs">
           {new Date(comment.createdAt).toLocaleDateString("zh-CN")}
         </span>
       </div>
-      <p className="text-sm text-warm-text mb-2">{comment.content}</p>
+      <p className="text-sm text-primary-800 mb-2">{comment.content}</p>
       <div className="flex gap-2 text-xs">
-        <button onClick={() => onReply(comment.id)} className="text-warm-link hover:underline">
+        <button onClick={() => onReply(comment.id)} className="text-primary-500 hover:underline">
           回复
         </button>
         {isAdmin && (

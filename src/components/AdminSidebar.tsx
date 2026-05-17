@@ -21,8 +21,8 @@ export function AdminSidebar() {
             href={link.href}
             className={`block px-3 py-2 rounded-lg text-sm transition-colors ${
               pathname === link.href
-                ? "bg-warm-accent text-white"
-                : "text-warm-muted hover:bg-warm-bg"
+                ? "bg-gradient-to-br from-primary-500 to-primary-600 text-white"
+                : "text-primary-600/60 hover:bg-primary-50/50"
             }`}
           >
             {link.label}

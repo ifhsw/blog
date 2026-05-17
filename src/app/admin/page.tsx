@@ -17,12 +17,12 @@ export default async function AdminDashboard() {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold text-warm-text mb-6">仪表盘</h1>
+      <h1 className="text-2xl font-bold text-primary-800 mb-6">仪表盘</h1>
       <div className="grid grid-cols-2 gap-4">
         {stats.map((s) => (
           <div key={s.label} className="card text-center">
-            <div className="text-3xl font-bold text-warm-accent">{s.value}</div>
-            <div className="text-sm text-warm-muted mt-1">{s.label}</div>
+            <div className="text-3xl font-bold text-primary-500">{s.value}</div>
+            <div className="text-sm text-primary-600/60 mt-1">{s.label}</div>
           </div>
         ))}
       </div>
