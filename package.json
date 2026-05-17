@@ -13,8 +13,6 @@
     "@prisma/client": "^7.8.0",
     "bcryptjs": "^2.4.3",
     "katex": "^0.16.23",
-    "lightningcss": "^1.32.0",
-    "lightningcss-win32-x64-msvc": "^1.32.0",
     "next": "16.2.6",
     "next-auth": "beta",
     "next-mdx-remote": "^5.0.0",
