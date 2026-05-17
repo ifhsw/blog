@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { compileMdx } from "@/lib/mdx";
 import { notFound } from "next/navigation";
+import { CommentSection } from "@/components/CommentSection";
 
 export default async function PostPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
@@ -37,10 +38,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
         <div>{mdxContent}</div>
       </article>
       <hr className="my-8 border-warm-border" />
-      {/* CommentSection will be added in Task 11 */}
-      <div className="text-center text-sm text-warm-muted py-8">
-        评论功能即将上线...
-      </div>
+      <CommentSection postId={post.id} comments={comments} />
     </main>
   );
 }
