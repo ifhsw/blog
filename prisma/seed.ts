@@ -7,7 +7,8 @@ const prisma = new PrismaClient({
 });
 
 async function main() {
-  const passwordHash = await bcrypt.hash("admin123", 10);
+  const adminPassword = process.env.SEED_ADMIN_PASSWORD || "admin123";
+  const passwordHash = await bcrypt.hash(adminPassword, 10);
 
   const admin = await prisma.user.upsert({
     where: { email: "admin@blog.com" },
@@ -20,11 +21,20 @@ async function main() {
     },
   });
 
-  const tagTech = await prisma.tag.create({ data: { name: "React" } });
-  const tagLife = await prisma.tag.create({ data: { name: "生活" } });
+  const tagReact = await prisma.tag.upsert({
+    where: { name: "React" },
+    create: { name: "React" },
+    update: {},
+  });
+  const tagLife = await prisma.tag.upsert({
+    where: { name: "生活" },
+    create: { name: "生活" },
+    update: {},
+  });
 
-  const post = await prisma.post.create({
-    data: {
+  const post = await prisma.post.upsert({
+    where: { slug: "hello-world" },
+    create: {
       title: "欢迎来到我的博客",
       slug: "hello-world",
       excerpt: "这是我的第一篇文章",
@@ -34,6 +44,7 @@ async function main() {
       authorId: admin.id,
       tags: { create: [{ tagId: tagLife.id }] },
     },
+    update: {},
   });
 
   console.log("Seed complete:", { admin: admin.email, post: post.title });
