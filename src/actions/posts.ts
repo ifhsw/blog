@@ -8,7 +8,7 @@ import { redirect } from "next/navigation";
 
 export async function createPost(formData: FormData) {
   const session = await auth();
-  if ((session?.user as any)?.role !== "ADMIN") return { success: false, error: "无权限" };
+  if (!session || (session.user as any)?.role !== "ADMIN") return { success: false, error: "无权限" };
 
   const title = formData.get("title") as string;
   const content = formData.get("content") as string;
@@ -80,4 +80,9 @@ export async function deletePost(id: string) {
   revalidatePath("/admin/posts");
   revalidatePath("/");
   return { success: true };
+}
+
+export async function deletePostAction(formData: FormData): Promise<void> {
+  const postId = formData.get("postId") as string;
+  await deletePost(postId);
 }

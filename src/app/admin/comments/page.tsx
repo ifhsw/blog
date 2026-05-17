@@ -1,5 +1,5 @@
 import { prisma } from "@/lib/prisma";
-import { deleteComment } from "@/actions/comments";
+import { deleteCommentAction } from "@/actions/comments";
 
 export default async function AdminCommentsPage() {
   const comments = await prisma.comment.findMany({
@@ -11,11 +11,13 @@ export default async function AdminCommentsPage() {
     take: 50,
   });
 
+  type CommentItem = (typeof comments)[number];
+
   return (
     <div>
       <h1 className="text-2xl font-bold text-warm-text mb-6">评论管理</h1>
       <div className="space-y-3">
-        {comments.map((c) => (
+        {comments.map((c: CommentItem) => (
           <div key={c.id} className="card flex justify-between items-start gap-4">
             <div className="flex-1">
               <p className="text-sm text-warm-text">{c.content}</p>
@@ -23,7 +25,8 @@ export default async function AdminCommentsPage() {
                 {c.user.username} · 在 <a href={`/post/${c.post.slug}`} className="text-warm-link hover:underline">{c.post.title}</a> · {new Date(c.createdAt).toLocaleString("zh-CN")}
               </div>
             </div>
-            <form action={deleteComment.bind(null, c.id)}>
+            <form action={deleteCommentAction}>
+              <input type="hidden" name="commentId" value={c.id} />
               <button type="submit" className="text-xs text-red-500 hover:underline">删除</button>
             </form>
           </div>

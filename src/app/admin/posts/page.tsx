@@ -1,6 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import Link from "next/link";
-import { deletePost } from "@/actions/posts";
+import { deletePostAction } from "@/actions/posts";
 
 export default async function AdminPostsPage() {
   const posts = await prisma.post.findMany({
@@ -26,7 +26,8 @@ export default async function AdminPostsPage() {
             </div>
             <div className="flex gap-2">
               <Link href={`/admin/posts/${post.id}/edit`} className="btn-secondary text-xs py-1 px-3">编辑</Link>
-              <form action={deletePost.bind(null, post.id)}>
+              <form action={deletePostAction}>
+                <input type="hidden" name="postId" value={post.id} />
                 <button type="submit" className="text-xs text-red-500 hover:underline py-1 px-3">
                   删除
                 </button>

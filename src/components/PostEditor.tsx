@@ -3,7 +3,8 @@
 import { useState } from "react";
 
 interface PostEditorProps {
-  action: (formData: FormData) => Promise<void>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  action: (formData: FormData) => Promise<any>;
   initialData?: {
     title: string;
     excerpt: string;

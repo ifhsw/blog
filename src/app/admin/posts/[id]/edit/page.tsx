@@ -24,7 +24,7 @@ export default async function EditPostPage({ params }: { params: Promise<{ id: s
           content: post.content,
           category: post.category,
           status: post.status,
-          tags: post.tags.map((pt) => pt.tag.name).join(", "),
+          tags: post.tags.map((pt: (typeof post.tags)[number]) => pt.tag.name).join(", "),
         }}
         submitLabel="保存"
       />

@@ -1,6 +1,6 @@
 "use client";
 
-import { createComment } from "@/actions/comments";
+import { createCommentAction } from "@/actions/comments";
 import { useSession } from "next-auth/react";
 import { useState } from "react";
 import { CommentItem } from "./CommentItem";
@@ -50,7 +50,7 @@ export function CommentSection({
         />
       ))}
       {session ? (
-        <form action={createComment} className="mt-6 space-y-3">
+        <form action={createCommentAction} className="mt-6 space-y-3">
           <input type="hidden" name="postId" value={postId} />
           {replyTo && <input type="hidden" name="parentId" value={replyTo} />}
           <textarea

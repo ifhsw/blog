@@ -37,3 +37,12 @@ export async function deleteComment(commentId: string) {
   revalidatePath("/post/[slug]");
   return { success: true };
 }
+
+export async function createCommentAction(formData: FormData): Promise<void> {
+  await createComment(formData);
+}
+
+export async function deleteCommentAction(formData: FormData): Promise<void> {
+  const commentId = formData.get("commentId") as string;
+  await deleteComment(commentId);
+}
