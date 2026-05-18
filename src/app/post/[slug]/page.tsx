@@ -8,6 +8,7 @@ import { BackToTop } from "@/components/BackToTop";
 import { TableOfContents } from "@/components/TableOfContents";
 import { ShareButtons } from "@/components/ShareButtons";
 import { ImageViewer } from "@/components/ImageViewer";
+import { BackButton } from "@/components/BackButton";
 
 function estimateReadingTime(text: string): number {
   const wordsPerMinute = 300; // Chinese characters per minute
@@ -55,6 +56,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
       <ReadingProgress />
       <BackToTop />
       <ImageViewer />
+      <BackButton />
 
       <main className="max-w-6xl mx-auto px-4 sm:px-6 py-8 lg:py-12">
         <div className="bg-white rounded-2xl shadow-sm border border-black/5 p-6 sm:p-8 lg:p-10">
