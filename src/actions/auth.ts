@@ -112,7 +112,7 @@ export async function deleteUser(formData: FormData) {
   if (!target) return { success: false, error: "用户不存在" };
   if (target.role === "ADMIN") return { success: false, error: "不能删除管理员" };
 
-  const selfId = (session.user as any).id;
+  const selfId = (session?.user as any)?.id;
   if (userId === selfId) return { success: false, error: "不能删除自己" };
 
   await prisma.$transaction([
