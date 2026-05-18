@@ -2,7 +2,7 @@ import { prisma } from "@/lib/prisma";
 import { compileMdx } from "@/lib/mdx";
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { CommentSection } from "@/components/CommentSection";
+import { CommentDrawer } from "@/components/CommentDrawer";
 import { ReadingProgress } from "@/components/ReadingProgress";
 import { BackToTop } from "@/components/BackToTop";
 import { TableOfContents } from "@/components/TableOfContents";
@@ -241,10 +241,8 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
         </div>
         </div>
 
-        {/* ---- Comments (centered below article) ---- */}
-        <section className="max-w-2xl mx-auto mt-12">
-          <CommentSection postId={post.id} comments={comments} />
-        </section>
+        {/* ---- Floating Comment Drawer ---- */}
+        <CommentDrawer postId={post.id} comments={comments} />
       </main>
     </>
   );
