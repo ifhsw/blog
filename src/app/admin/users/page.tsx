@@ -1,7 +1,12 @@
 import { prisma } from "@/lib/prisma";
+import { auth } from "@/lib/auth";
 import { ResetPasswordButton } from "@/components/ResetPasswordButton";
+import { DeleteUserButton } from "@/components/DeleteUserButton";
 
 export default async function AdminUsersPage() {
+  const session = await auth();
+  const currentUserId = (session?.user as any)?.id;
+
   const users = await prisma.user.findMany({
     orderBy: { createdAt: "desc" },
     include: {
@@ -24,7 +29,12 @@ export default async function AdminUsersPage() {
                   {u.role === "ADMIN" ? "管理员" : "读者"}
                 </span>
               </div>
-              <ResetPasswordButton userId={u.id} username={u.username} />
+              <div className="flex items-center gap-3">
+                <ResetPasswordButton userId={u.id} username={u.username} />
+                {u.id !== currentUserId && u.role !== "ADMIN" && (
+                  <DeleteUserButton userId={u.id} username={u.username} />
+                )}
+              </div>
             </div>
             <div className="text-sm text-primary-600/60 mt-1 space-y-0.5">
               <div>邮箱：{u.email}</div>

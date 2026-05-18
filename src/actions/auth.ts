@@ -98,3 +98,30 @@ export async function resetUserPassword(formData: FormData) {
 
   return { success: true };
 }
+
+export async function deleteUser(formData: FormData) {
+  const session = await auth();
+  if ((session?.user as any)?.role !== "ADMIN") {
+    return { success: false, error: "无权限" };
+  }
+
+  const userId = formData.get("userId") as string;
+  if (!userId) return { success: false, error: "缺少用户ID" };
+
+  const target = await prisma.user.findUnique({ where: { id: userId } });
+  if (!target) return { success: false, error: "用户不存在" };
+  if (target.role === "ADMIN") return { success: false, error: "不能删除管理员" };
+
+  const selfId = (session.user as any).id;
+  if (userId === selfId) return { success: false, error: "不能删除自己" };
+
+  await prisma.$transaction([
+    prisma.postTag.deleteMany({ where: { post: { authorId: userId } } }),
+    prisma.comment.deleteMany({ where: { userId } }),
+    prisma.question.deleteMany({ where: { userId } }),
+    prisma.post.deleteMany({ where: { authorId: userId } }),
+    prisma.user.delete({ where: { id: userId } }),
+  ]);
+
+  return { success: true };
+}
