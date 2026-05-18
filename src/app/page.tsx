@@ -12,39 +12,38 @@ export default async function HomePage() {
   return (
     <main className="flex-1">
       {/* Hero section — inspired by Stripe/Vercel */}
-      <section className="hero-gradient border-b border-primary-200/20">
+      <section className="hero-gradient">
         <div className="max-w-6xl mx-auto px-6 py-16 md:py-24">
           <div className="max-w-3xl animate-fade-in-up">
-            <div className="inline-flex items-center gap-2 mb-6 px-3 py-1 rounded-full bg-primary-100/60 border border-primary-200/30 text-xs font-semibold text-primary-600 tracking-wide">
-              <span className="w-1.5 h-1.5 rounded-full bg-primary-500 animate-pulse" />
-              博客已就绪
+            <div className="inline-flex items-center gap-2 mb-6 px-3 py-1 rounded-full bg-black/10 border border-black/10 text-xs font-semibold text-primary-700 tracking-wide">
+              <span className="w-1.5 h-1.5 bg-blue-500" style={{ clipPath: "polygon(50% 0%, 0% 100%, 100% 100%)" }} />
+              玄桥 · 写意留白
             </div>
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-primary-900 leading-tight">
-              记录
-              <span className="gradient-text"> 技术与生活</span>
+              孤灯
+              <span className="text-blue-600"> 残雪</span>
               <br />
-              在喧嚣中找到秩序
+              <span className="text-primary-600">墨色生寒</span>
             </h1>
-            <p className="mt-6 text-lg md:text-xl text-primary-600/60 leading-relaxed max-w-xl animate-fade-in-up animation-delay-100">
-              探索前端开发、系统设计与开源项目的思考笔记。
-              用文字捕捉每一个灵感的瞬间。
+            <p className="mt-6 text-lg md:text-xl text-primary-900/60 leading-relaxed max-w-xl animate-fade-in-up animation-delay-100">
+              冷灰、苍蓝、低饱和。技术笔记与随想，在静谧中沉淀。
             </p>
             <div className="mt-8 flex items-center gap-4 animate-fade-in-up animation-delay-200">
               <a
                 href="/tech"
-                className="btn-primary !rounded-xl !px-6 !py-3 !text-base"
+                className="btn-primary !rounded-lg !px-6 !py-3 !text-base"
               >
-                阅读技术文章
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                技术文章
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                   <line x1="5" y1="12" x2="19" y2="12" />
                   <polyline points="12 5 19 12 12 19" />
                 </svg>
               </a>
               <a
                 href="/about"
-                className="btn-secondary !rounded-xl !px-6 !py-3 !text-base"
+                className="btn-secondary !rounded-lg !px-6 !py-3 !text-base"
               >
-                了解更多
+                关于
               </a>
             </div>
           </div>
@@ -59,14 +58,14 @@ export default async function HomePage() {
             <div className="flex items-center justify-between mb-8">
               <div>
                 <h2 className="text-xl font-bold text-primary-800 tracking-tight">最新文章</h2>
-                <p className="text-sm text-primary-600/45 mt-1">每一次书写都是思想的沉淀</p>
+                <p className="text-sm text-primary-400/50 mt-1">墨痕未干，字里行间</p>
               </div>
             </div>
 
             {posts.length === 0 ? (
               <div className="text-center py-20">
-                <div className="text-5xl mb-4 opacity-30">✍️</div>
-                <p className="text-primary-600/50 text-lg">还没有文章，敬请期待</p>
+                <div className="text-5xl mb-4 opacity-20 select-none">—</div>
+                <p className="text-primary-400/40 text-lg">尚未落笔，静候墨痕</p>
               </div>
             ) : (
               <div className="space-y-5">

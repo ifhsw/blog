@@ -5,6 +5,13 @@ import { auth } from "@/lib/auth";
 import { revalidatePath } from "next/cache";
 import slugify from "slugify";
 import { redirect } from "next/navigation";
+import { deletePostWithCleanup, cleanOrphanUploads } from "@/lib/uploads";
+
+async function cleanOrphanTags() {
+  await prisma.tag.deleteMany({
+    where: { posts: { none: {} } },
+  });
+}
 
 export async function createPost(formData: FormData) {
   const session = await auth();
@@ -76,10 +83,20 @@ export async function deletePost(id: string) {
   const session = await auth();
   if ((session?.user as any)?.role !== "ADMIN") return { success: false, error: "无权限" };
 
-  await prisma.post.delete({ where: { id } });
+  await deletePostWithCleanup(id);
+  await cleanOrphanTags();
   revalidatePath("/admin/posts");
   revalidatePath("/");
   return { success: true };
+}
+
+export async function cleanOrphanUploadsAction() {
+  const session = await auth();
+  if ((session?.user as any)?.role !== "ADMIN") return { success: false, error: "无权限" };
+
+  const count = await cleanOrphanUploads();
+  revalidatePath("/admin/posts");
+  return { success: true, cleaned: count };
 }
 
 export async function deletePostAction(formData: FormData): Promise<void> {

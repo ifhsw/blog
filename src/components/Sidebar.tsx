@@ -10,7 +10,12 @@ export async function Sidebar() {
   });
 
   const tags = await prisma.tag.findMany({
-    include: { _count: { select: { posts: true } } },
+    include: {
+      _count: { select: { posts: { where: { post: { status: "PUBLISHED" } } } } },
+    },
+    where: {
+      posts: { some: { post: { status: "PUBLISHED" } } },
+    },
   });
 
   return (
