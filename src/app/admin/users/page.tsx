@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/prisma";
+import { ResetPasswordButton } from "@/components/ResetPasswordButton";
 
 export default async function AdminUsersPage() {
   const users = await prisma.user.findMany({
@@ -23,6 +24,7 @@ export default async function AdminUsersPage() {
                   {u.role === "ADMIN" ? "管理员" : "读者"}
                 </span>
               </div>
+              <ResetPasswordButton userId={u.id} username={u.username} />
             </div>
             <div className="text-sm text-primary-600/60 mt-1 space-y-0.5">
               <div>邮箱：{u.email}</div>

@@ -5,8 +5,8 @@ import path from "path";
 
 export async function POST(request: Request) {
   const session = await auth();
-  if ((session?.user as any)?.role !== "ADMIN") {
-    return NextResponse.json({ error: "无权限" }, { status: 403 });
+  if (!session?.user) {
+    return NextResponse.json({ error: "请先登录" }, { status: 401 });
   }
 
   try {

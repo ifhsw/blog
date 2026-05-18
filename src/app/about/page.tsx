@@ -1,4 +1,12 @@
-export default function AboutPage() {
+import { marked } from "marked";
+import { getSiteSetting } from "@/actions/settings";
+
+export const dynamic = "force-dynamic";
+
+export default async function AboutPage() {
+  const aboutContent = await getSiteSetting("about_content");
+  const customHtml = aboutContent ? (marked.parse(aboutContent) as string) : null;
+
   const skills = [
     { label: "前端开发", items: ["React", "Next.js", "TypeScript", "Tailwind CSS"] },
     { label: "系统设计", items: ["Node.js", "SQLite", "系统架构", "API 设计"] },
@@ -62,6 +70,14 @@ export default function AboutPage() {
           </p>
         </div>
       </section>
+
+      {/* Custom content */}
+      {customHtml && (
+        <article
+          className="mt-10 animate-fade-in-up"
+          dangerouslySetInnerHTML={{ __html: customHtml }}
+        />
+      )}
 
       {/* Contact hint */}
       <div className="mt-8 text-center text-sm text-primary-400/45 animate-fade-in-up" style={{ animationDelay: "500ms" }}>

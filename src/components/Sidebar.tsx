@@ -58,7 +58,7 @@ export async function Sidebar() {
           {tags.map((t) => (
             <Link
               key={t.id}
-              href={`/archive`}
+              href={`/tag/${encodeURIComponent(t.name)}`}
               className="tag cursor-pointer hover:scale-105 active:scale-95 transition-transform"
             >
               {t.name}

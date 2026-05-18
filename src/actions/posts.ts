@@ -25,6 +25,7 @@ export async function createPost(formData: FormData) {
   const tagNames = (formData.get("tags") as string).split(",").map((t) => t.trim()).filter(Boolean);
 
   let slug = slugify(title, { lower: true, strict: true, locale: "zh" });
+  if (!slug) slug = Date.now().toString(36);
   const existing = await prisma.post.findUnique({ where: { slug } });
   if (existing) slug += "-" + Date.now().toString(36);
 

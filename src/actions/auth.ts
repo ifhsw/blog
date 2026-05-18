@@ -1,6 +1,6 @@
 "use server";
 
-import { signIn, signOut } from "@/lib/auth";
+import { signIn, signOut, auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import bcrypt from "bcryptjs";
 import { AuthError } from "next-auth";
@@ -48,4 +48,53 @@ export async function registerAction(formData: FormData) {
 
 export async function logoutAction() {
   await signOut({ redirect: false });
+}
+
+export async function changePassword(formData: FormData) {
+  const session = await auth();
+  if (!session?.user) return { success: false, error: "请先登录" };
+
+  const currentPassword = formData.get("currentPassword") as string;
+  const newPassword = formData.get("newPassword") as string;
+
+  if (!currentPassword || !newPassword) {
+    return { success: false, error: "请填写所有字段" };
+  }
+  if (newPassword.length < 6) {
+    return { success: false, error: "新密码至少6位" };
+  }
+
+  const userId = (session.user as any).id;
+  const user = await prisma.user.findUnique({ where: { id: userId } });
+  if (!user) return { success: false, error: "用户不存在" };
+
+  const valid = await bcrypt.compare(currentPassword, user.passwordHash);
+  if (!valid) return { success: false, error: "当前密码错误" };
+
+  const passwordHash = await bcrypt.hash(newPassword, 10);
+  await prisma.user.update({ where: { id: userId }, data: { passwordHash } });
+
+  return { success: true };
+}
+
+export async function resetUserPassword(formData: FormData) {
+  const session = await auth();
+  if ((session?.user as any)?.role !== "ADMIN") {
+    return { success: false, error: "无权限" };
+  }
+
+  const userId = formData.get("userId") as string;
+  const newPassword = formData.get("newPassword") as string;
+
+  if (!userId || !newPassword) {
+    return { success: false, error: "请填写所有字段" };
+  }
+  if (newPassword.length < 6) {
+    return { success: false, error: "新密码至少6位" };
+  }
+
+  const passwordHash = await bcrypt.hash(newPassword, 10);
+  await prisma.user.update({ where: { id: userId }, data: { passwordHash } });
+
+  return { success: true };
 }

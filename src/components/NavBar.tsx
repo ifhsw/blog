@@ -15,6 +15,7 @@ const navLinks = [
   { href: "/tech", label: "技术" },
   { href: "/essay", label: "随笔" },
   { href: "/archive", label: "归档" },
+  { href: "/qa", label: "问答" },
   { href: "/about", label: "关于" },
 ];
 
@@ -84,15 +85,30 @@ export function NavBar({ isAdmin, userName }: NavBarProps) {
             </Link>
           )}
 
+          {/* Search */}
+          <form action="/search" className="flex items-center">
+            <input
+              name="q"
+              type="search"
+              placeholder="搜索..."
+              className="w-28 px-2 py-1 text-xs rounded-lg border border-primary-200/50 bg-transparent
+                         text-primary-700 placeholder-primary-400/50
+                         focus:outline-none focus:border-primary-300 focus:w-40 transition-all duration-200"
+            />
+          </form>
+
           {/* Divider */}
           <div className="mx-2 h-5 w-px bg-primary-200/60" />
 
           {/* Auth */}
           {userName ? (
             <span className="flex items-center gap-2 text-sm text-primary-600/80">
-              <span className="hidden sm:inline text-xs font-medium text-primary-600/50">
+              <Link
+                href="/account"
+                className="hidden sm:inline text-xs font-medium text-primary-600/50 hover:text-primary-700 transition-colors"
+              >
                 {userName}
-              </span>
+              </Link>
               <LogoutButton />
             </span>
           ) : (
@@ -188,10 +204,13 @@ export function NavBar({ isAdmin, userName }: NavBarProps) {
 
           {userName && (
             <div className="mt-4 pt-4 border-t border-primary-200/30 px-4">
-              <span className="text-sm text-primary-600/50">{userName}</span>
-              <div className="mt-2">
-                <LogoutButton />
-              </div>
+              <Link
+                href="/account"
+                className="block text-sm text-primary-600/70 hover:text-primary-800 transition-colors mb-2"
+              >
+                {userName}
+              </Link>
+              <LogoutButton />
             </div>
           )}
         </div>

@@ -8,6 +8,7 @@ const links = [
   { href: "/admin/posts", label: "文章管理" },
   { href: "/admin/comments", label: "评论管理" },
   { href: "/admin/users", label: "用户管理" },
+  { href: "/admin/settings", label: "站点设置" },
 ];
 
 export function AdminSidebar() {
