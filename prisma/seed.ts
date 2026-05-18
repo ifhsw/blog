@@ -7,7 +7,11 @@ const prisma = new PrismaClient({
 });
 
 async function main() {
-  const adminPassword = process.env.SEED_ADMIN_PASSWORD || "admin123";
+  const adminPassword = process.env.SEED_ADMIN_PASSWORD;
+  if (!adminPassword) {
+    console.error("SEED_ADMIN_PASSWORD environment variable is required to seed the database.");
+    process.exit(1);
+  }
   const passwordHash = await bcrypt.hash(adminPassword, 10);
 
   const admin = await prisma.user.upsert({

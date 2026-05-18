@@ -45,7 +45,9 @@ export async function POST(request: Request) {
 
     return NextResponse.json({ success: true, url, filename: uniqueName });
   } catch (error) {
-    console.error("Upload error:", error);
+    if (process.env.NODE_ENV !== "production") {
+      console.error("Upload error:", error);
+    }
     return NextResponse.json({ error: "上传失败" }, { status: 500 });
   }
 }
