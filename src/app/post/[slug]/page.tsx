@@ -190,10 +190,6 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
               </div>
             </footer>
 
-            {/* ---- Comments ---- */}
-            <section className="mt-10">
-              <CommentSection postId={post.id} comments={comments} />
-            </section>
           </article>
 
           {/* ========== SIDEBAR COLUMN ========== */}
@@ -244,6 +240,11 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
           </aside>
         </div>
         </div>
+
+        {/* ---- Comments (centered below article) ---- */}
+        <section className="max-w-2xl mx-auto mt-12">
+          <CommentSection postId={post.id} comments={comments} />
+        </section>
       </main>
     </>
   );

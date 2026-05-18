@@ -317,22 +317,6 @@
     transform: scale(1.02);
   }
 
-  /* Fullscreen image overlay */
-  article img.fullscreen {
-    position: fixed;
-    inset: 0;
-    z-index: 200;
-    max-width: 90vw;
-    max-height: 90vh;
-    width: auto;
-    height: auto;
-    margin: auto;
-    border-radius: var(--radius-lg);
-    box-shadow: 0 0 0 9999px rgba(0,0,0,0.7);
-    cursor: zoom-out;
-    transform: none;
-  }
-
   /* Prevent overflow: code, tables, embeds */
   article pre,
   article table,
