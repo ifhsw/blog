@@ -3,6 +3,7 @@
 import { createQuestion } from "@/actions/questions";
 import { useRef, useState, useMemo } from "react";
 import { marked } from "marked";
+import { sanitizeHtmlContent } from "@/lib/sanitize";
 
 export function QaForm() {
   const formRef = useRef<HTMLFormElement>(null);
@@ -17,7 +18,7 @@ export function QaForm() {
   const previewHtml = useMemo(() => {
     if (!preview) return "";
     try {
-      return marked.parse(content) as string;
+      return sanitizeHtmlContent(marked.parse(content) as string);
     } catch {
       return "<p>预览解析失败</p>";
     }

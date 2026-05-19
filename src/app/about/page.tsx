@@ -1,11 +1,14 @@
 import { marked } from "marked";
 import { getSiteSetting } from "@/actions/settings";
+import { sanitizeHtmlContent } from "@/lib/sanitize";
 
 export const dynamic = "force-dynamic";
 
 export default async function AboutPage() {
   const aboutContent = await getSiteSetting("about_content");
-  const customHtml = aboutContent ? (marked.parse(aboutContent) as string) : null;
+  const customHtml = aboutContent
+    ? sanitizeHtmlContent(marked.parse(aboutContent) as string)
+    : null;
 
   const skills = [
     { label: "前端开发", items: ["React", "Next.js", "TypeScript", "Tailwind CSS"] },

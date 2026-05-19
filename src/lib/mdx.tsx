@@ -4,6 +4,7 @@ import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
 import { mdxComponents } from "@/components/mdx";
 import { marked } from "marked";
+import { sanitizeHtmlContent } from "@/lib/sanitize";
 
 const CALLOUT_TAGS = ["Info", "Warn", "Tip", "Note"];
 
@@ -84,7 +85,7 @@ export async function compileMdx(source: string) {
   } catch (err) {
     console.error("[mdx] compile error, falling back to marked:", (err as Error).message);
     // Fallback: render as plain markdown (no MDX components)
-    const html = await marked.parse(safeSource);
+    const html = sanitizeHtmlContent(await marked.parse(safeSource));
     return (
       <div className="mdx-fallback">
         <div className="text-xs text-amber-600/70 mb-4 px-3 py-1.5 bg-amber-50 rounded-lg border border-amber-200/50">

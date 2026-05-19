@@ -4,6 +4,7 @@ import { replyToQuestion } from "@/actions/questions";
 import { QuestionDeleteButton } from "@/components/QuestionDeleteButton";
 import { useState, useRef, useMemo } from "react";
 import { marked } from "marked";
+import { sanitizeHtmlContent } from "@/lib/sanitize";
 
 interface QuestionData {
   id: string;
@@ -33,7 +34,7 @@ function RenderedContent({ html }: { html: string }) {
 
 function parseMarkdown(text: string): string {
   try {
-    return marked.parse(text) as string;
+    return sanitizeHtmlContent(marked.parse(text) as string);
   } catch {
     return text;
   }

@@ -2,6 +2,7 @@
 
 import { useState, useRef, useMemo } from "react";
 import { marked } from "marked";
+import { sanitizeHtmlContent } from "@/lib/sanitize";
 
 interface PostEditorProps {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -28,7 +29,7 @@ export function PostEditor({ action, initialData, submitLabel, showStatus = true
   const previewHtml = useMemo(() => {
     if (!preview) return "";
     try {
-      return marked.parse(content) as string;
+      return sanitizeHtmlContent(marked.parse(content) as string);
     } catch {
       return "<p>预览解析失败</p>";
     }

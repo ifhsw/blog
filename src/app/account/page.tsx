@@ -6,6 +6,7 @@ import { QuestionDeleteButton } from "@/components/QuestionDeleteButton";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import { marked } from "marked";
+import { sanitizeHtmlContent } from "@/lib/sanitize";
 
 export const dynamic = "force-dynamic";
 
@@ -107,7 +108,7 @@ export default async function AccountPage() {
                         [&_img]:max-w-full [&_img]:rounded [&_img]:max-h-20
                         [&_p]:mb-1 [&_pre]:hidden"
                       dangerouslySetInnerHTML={{
-                        __html: marked.parse(q.content) as string,
+                        __html: sanitizeHtmlContent(marked.parse(q.content) as string),
                       }}
                     />
                     <div className="flex items-center gap-3 mt-2 text-xs text-primary-400/50">

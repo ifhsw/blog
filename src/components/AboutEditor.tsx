@@ -3,6 +3,7 @@
 import { useState, useRef, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { marked } from "marked";
+import { sanitizeHtmlContent } from "@/lib/sanitize";
 import { updateSiteSetting } from "@/actions/settings";
 
 interface Props {
@@ -22,7 +23,7 @@ export function AboutEditor({ initialContent }: Props) {
   const previewHtml = useMemo(() => {
     if (!preview) return "";
     try {
-      return marked.parse(content) as string;
+      return sanitizeHtmlContent(marked.parse(content) as string);
     } catch {
       return "<p>预览解析失败</p>";
     }
