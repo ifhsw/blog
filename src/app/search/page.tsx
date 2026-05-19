@@ -16,6 +16,7 @@ export default async function SearchPage({
     posts = await prisma.post.findMany({
       where: {
         status: "PUBLISHED",
+        visibility: "PUBLIC",
         OR: [
           { title: { contains: query } },
           { content: { contains: query } },

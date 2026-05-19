@@ -33,6 +33,7 @@ model Post {
   coverImage String?
   category   String
   status     String    @default("DRAFT")
+  visibility String    @default("PUBLIC")
   authorId   String
   author     User      @relation(fields: [authorId], references: [id])
   createdAt  DateTime  @default(now())

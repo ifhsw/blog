@@ -3,7 +3,7 @@ import { PostCard } from "@/components/PostCard";
 
 export default async function TechPage() {
   const posts = await prisma.post.findMany({
-    where: { status: "PUBLISHED", category: "TECH" },
+    where: { status: "PUBLISHED", visibility: "PUBLIC", category: "TECH" },
     orderBy: { createdAt: "desc" },
     include: { tags: { include: { tag: true } } },
   });

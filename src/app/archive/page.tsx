@@ -3,7 +3,7 @@ import Link from "next/link";
 
 export default async function ArchivePage() {
   const posts = await prisma.post.findMany({
-    where: { status: "PUBLISHED" },
+    where: { status: "PUBLISHED", visibility: "PUBLIC" },
     orderBy: { createdAt: "desc" },
     select: { title: true, slug: true, createdAt: true, category: true },
   });

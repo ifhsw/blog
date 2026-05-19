@@ -28,7 +28,7 @@ export default async function UserProfilePage({
   if (!user) notFound();
 
   const publishedPosts = await prisma.post.findMany({
-    where: { authorId: user.id, status: "PUBLISHED" },
+    where: { authorId: user.id, status: "PUBLISHED", visibility: "PUBLIC" },
     orderBy: { createdAt: "desc" },
     select: {
       id: true,

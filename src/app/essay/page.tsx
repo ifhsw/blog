@@ -3,7 +3,7 @@ import { PostCard } from "@/components/PostCard";
 
 export default async function EssayPage() {
   const posts = await prisma.post.findMany({
-    where: { status: "PUBLISHED", category: "ESSAY" },
+    where: { status: "PUBLISHED", visibility: "PUBLIC", category: "ESSAY" },
     orderBy: { createdAt: "desc" },
     include: { tags: { include: { tag: true } } },
   });

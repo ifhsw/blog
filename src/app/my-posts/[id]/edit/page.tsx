@@ -32,10 +32,12 @@ export default async function EditMyPostPage({ params }: { params: Promise<{ id:
           content: post.content,
           category: post.category,
           status: post.status,
+          visibility: post.visibility,
           tags: post.tags.map((pt: (typeof post.tags)[number]) => pt.tag.name).join(", "),
         }}
         submitLabel="保存"
         showStatus={isAdmin}
+        showVisibility={true}
       />
     </div>
   );

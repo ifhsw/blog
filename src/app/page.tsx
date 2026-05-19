@@ -4,7 +4,7 @@ import { Sidebar } from "@/components/Sidebar";
 
 export default async function HomePage() {
   const posts = await prisma.post.findMany({
-    where: { status: "PUBLISHED" },
+    where: { status: "PUBLISHED", visibility: "PUBLIC" },
     orderBy: { createdAt: "desc" },
     include: { tags: { include: { tag: true } } },
   });

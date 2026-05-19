@@ -13,13 +13,15 @@ interface PostEditorProps {
     content: string;
     category: string;
     status: string;
+    visibility?: string;
     tags?: string;
   };
   submitLabel: string;
   showStatus?: boolean;
+  showVisibility?: boolean;
 }
 
-export function PostEditor({ action, initialData, submitLabel, showStatus = true }: PostEditorProps) {
+export function PostEditor({ action, initialData, submitLabel, showStatus = true, showVisibility = false }: PostEditorProps) {
   const [preview, setPreview] = useState(false);
   const [content, setContent] = useState(initialData?.content || "");
   const [uploading, setUploading] = useState(false);
@@ -121,6 +123,18 @@ export function PostEditor({ action, initialData, submitLabel, showStatus = true
           <input type="hidden" name="status" value="DRAFT" />
         )}
       </div>
+
+      {showVisibility ? (
+        <div>
+          <label className="block text-sm font-medium text-primary-600/60 mb-1">可见性</label>
+          <select name="visibility" defaultValue={initialData?.visibility || "PUBLIC"} className="input-field">
+            <option value="PUBLIC">公开</option>
+            <option value="PRIVATE">仅自己可见</option>
+          </select>
+        </div>
+      ) : (
+        <input type="hidden" name="visibility" value={initialData?.visibility || "PUBLIC"} />
+      )}
 
       {/* Content area */}
       <div>

@@ -25,6 +25,7 @@ export async function createPost(formData: FormData) {
   const category = formData.get("category") as string;
   const excerpt = formData.get("excerpt") as string;
   const status = formData.get("status") as string;
+  const visibility = (formData.get("visibility") as string) || "PUBLIC";
   const tagNames = (formData.get("tags") as string).split(",").map((t) => t.trim()).filter(Boolean);
 
   let slug = slugify(title, { lower: true, strict: true, locale: "zh" });
@@ -43,6 +44,7 @@ export async function createPost(formData: FormData) {
       category,
       excerpt: excerpt || null,
       status: finalStatus,
+      visibility,
       authorId: userId,
       tags: {
         create: await Promise.all(
@@ -81,13 +83,23 @@ export async function updatePost(id: string, formData: FormData) {
   const category = formData.get("category") as string;
   const excerpt = formData.get("excerpt") as string;
   const status = formData.get("status") as string;
+  const visibility = (formData.get("visibility") as string) || undefined;
 
   // Non-admin users can only save as draft
   const finalStatus = isAdmin ? status : "DRAFT";
 
+  const updateData: Record<string, unknown> = {
+    title, content, category, excerpt: excerpt || null, status: finalStatus,
+  };
+
+  // Only admin can change visibility
+  if (isAdmin && visibility) {
+    updateData.visibility = visibility;
+  }
+
   await prisma.post.update({
     where: { id },
-    data: { title, content, category, excerpt: excerpt || null, status: finalStatus },
+    data: updateData,
   });
 
   revalidatePath("/admin/posts");

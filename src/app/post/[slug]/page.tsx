@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/prisma";
+import { auth } from "@/lib/auth";
 import { compileMdx } from "@/lib/mdx";
 import { notFound } from "next/navigation";
 import Link from "next/link";
@@ -26,7 +27,17 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
     },
   });
 
-  if (!post || post.status !== "PUBLISHED") notFound();
+  if (!post) notFound();
+
+  const session = await auth();
+  const userId = (session?.user as any)?.id;
+  const isAdmin = (session?.user as any)?.role === "ADMIN";
+  const isAuthor = userId === post.authorId;
+
+  // Drafts and private posts are only visible to author and admin
+  if (post.status !== "PUBLISHED" || post.visibility === "PRIVATE") {
+    if (!isAuthor && !isAdmin) notFound();
+  }
 
   const mdxContent = await compileMdx(post.content);
   const readingTime = estimateReadingTime(post.content);
@@ -43,6 +54,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
   const relatedPosts = await prisma.post.findMany({
     where: {
       status: "PUBLISHED",
+      visibility: "PUBLIC",
       category: post.category,
       id: { not: post.id },
     },

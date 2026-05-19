@@ -16,6 +16,7 @@ export default async function TagPage({
   const posts = await prisma.post.findMany({
     where: {
       status: "PUBLISHED",
+      visibility: "PUBLIC",
       tags: { some: { tagId: tag.id } },
     },
     orderBy: { createdAt: "desc" },

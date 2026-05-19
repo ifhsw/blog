@@ -3,7 +3,7 @@ import Link from "next/link";
 
 export async function Sidebar() {
   const recentPosts = await prisma.post.findMany({
-    where: { status: "PUBLISHED" },
+    where: { status: "PUBLISHED", visibility: "PUBLIC" },
     orderBy: { createdAt: "desc" },
     take: 5,
     select: { title: true, slug: true, category: true },
@@ -11,10 +11,10 @@ export async function Sidebar() {
 
   const tags = await prisma.tag.findMany({
     include: {
-      _count: { select: { posts: { where: { post: { status: "PUBLISHED" } } } } },
+      _count: { select: { posts: { where: { post: { status: "PUBLISHED", visibility: "PUBLIC" } } } } },
     },
     where: {
-      posts: { some: { post: { status: "PUBLISHED" } } },
+      posts: { some: { post: { status: "PUBLISHED", visibility: "PUBLIC" } } },
     },
   });
 
