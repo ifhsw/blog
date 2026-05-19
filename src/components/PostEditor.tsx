@@ -112,7 +112,7 @@ export function PostEditor({ action, initialData, submitLabel, showStatus = true
           <div className="flex-1">
             <label className="block text-sm font-medium text-primary-600/60 mb-1">状态</label>
             <select name="status" defaultValue={initialData?.status || "DRAFT"} className="input-field">
-              <option value="DRAFT">草稿</option>
+              <option value="DRAFT">投稿</option>
               <option value="PUBLISHED">发布</option>
             </select>
           </div>

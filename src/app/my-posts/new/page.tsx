@@ -5,7 +5,7 @@ export default function MyPostsNewPage() {
   return (
     <div>
       <h1 className="text-2xl font-bold text-primary-800 mb-6">写文章</h1>
-      <PostEditor action={createPost} submitLabel="保存草稿" showStatus={false} />
+      <PostEditor action={createPost} submitLabel="投稿" showStatus={false} />
     </div>
   );
 }

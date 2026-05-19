@@ -32,7 +32,7 @@ export default async function MyPostsPage() {
                   {post.title}
                 </Link>
                 <div className="text-xs text-primary-600/60 mt-1">
-                  {post.status === "DRAFT" ? "草稿" : "已发布"} · {new Date(post.createdAt).toLocaleDateString("zh-CN")}
+                  {post.status === "DRAFT" ? "投稿" : "已发布"} · {new Date(post.createdAt).toLocaleDateString("zh-CN")}
                 </div>
               </div>
               <div className="flex gap-2">
