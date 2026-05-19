@@ -109,9 +109,9 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
                   {post.author.username[0].toUpperCase()}
                 </div>
                 <div className="min-w-0">
-                  <div className="text-sm font-semibold text-primary-800">
+                  <Link href={`/user/${post.author.username}`} className="text-sm font-semibold text-primary-800 hover:text-primary-600 transition-colors">
                     {post.author.username}
-                  </div>
+                  </Link>
                   <div className="text-xs text-primary-500/45">作者</div>
                 </div>
               </div>

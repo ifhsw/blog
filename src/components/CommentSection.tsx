@@ -24,15 +24,29 @@ export function CommentSection({
 }) {
   const { data: session } = useSession();
   const isAdmin = (session?.user as any)?.role === "ADMIN";
-  const [replyTo, setReplyTo] = useState<string | null>(null);
+  const [replyTo, setReplyTo] = useState<{ id: string; username: string } | null>(null);
 
   function nestComments(comments: CommentWithUser[]): CommentWithUser[] {
-    const top = comments.filter((c) => !c.parentId);
-    const replies = comments.filter((c) => c.parentId);
-    return top.map((c) => ({
-      ...c,
-      replies: replies.filter((r) => r.parentId === c.id),
-    }));
+    const byParent = new Map<string, CommentWithUser[]>();
+    const roots: CommentWithUser[] = [];
+
+    for (const c of comments) {
+      if (!c.parentId) {
+        roots.push(c);
+      } else {
+        const siblings = byParent.get(c.parentId) || [];
+        siblings.push(c);
+        byParent.set(c.parentId, siblings);
+      }
+    }
+
+    function attachReplies(comment: CommentWithUser): CommentWithUser {
+      const children = byParent.get(comment.id);
+      if (!children) return comment;
+      return { ...comment, replies: children.map(attachReplies) };
+    }
+
+    return roots.map(attachReplies);
   }
 
   const nested = nestComments(initialComments);
@@ -58,7 +72,7 @@ export function CommentSection({
             key={comment.id}
             comment={comment}
             isAdmin={isAdmin}
-            onReply={setReplyTo}
+            onReply={(id, username) => setReplyTo({ id, username })}
             replyTo={replyTo}
             postId={postId}
           />
@@ -68,14 +82,14 @@ export function CommentSection({
       {session ? (
         <form action={createCommentAction} className="mt-6 card space-y-3 !p-4">
           <input type="hidden" name="postId" value={postId} />
-          {replyTo && <input type="hidden" name="parentId" value={replyTo} />}
+          {replyTo && <input type="hidden" name="parentId" value={replyTo.id} />}
           {replyTo && (
             <div className="flex items-center gap-2 text-xs text-primary-500/60 bg-primary-50/30 -mx-1 px-3 py-1.5 rounded-lg">
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M9 14L4 9l5-5" />
                 <path d="M4 9h10.5a5.5 5.5 0 0 1 5.5 5.5v0a5.5 5.5 0 0 1-5.5 5.5H11" />
               </svg>
-              正在回复评论
+              回复 @{replyTo.username}
               <button type="button" onClick={() => setReplyTo(null)} className="ml-auto text-primary-400 hover:text-primary-600">取消</button>
             </div>
           )}

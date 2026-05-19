@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
 import { ChangePasswordForm } from "@/components/ChangePasswordForm";
+import { ProfileEditForm } from "@/components/ProfileEditForm";
 import { QuestionDeleteButton } from "@/components/QuestionDeleteButton";
 import { redirect } from "next/navigation";
 import Link from "next/link";
@@ -15,7 +16,17 @@ export default async function AccountPage() {
   const userId = (session.user as any).id;
   const user = await prisma.user.findUnique({
     where: { id: userId },
-    select: { username: true, email: true, role: true, createdAt: true },
+    select: {
+      username: true,
+      email: true,
+      role: true,
+      createdAt: true,
+      bio: true,
+      website: true,
+      location: true,
+      github: true,
+      twitter: true,
+    },
   });
   if (!user) redirect("/login");
 
@@ -30,7 +41,15 @@ export default async function AccountPage() {
 
       {/* User info */}
       <div className="card mb-6 space-y-2">
-        <h2 className="text-base font-semibold text-primary-700">基本信息</h2>
+        <div className="flex items-center justify-between">
+          <h2 className="text-base font-semibold text-primary-700">基本信息</h2>
+          <Link
+            href={`/user/${user.username}`}
+            className="text-xs text-blue-500 hover:underline"
+          >
+            查看我的主页
+          </Link>
+        </div>
         <div className="text-sm text-primary-600/60 space-y-1">
           <div>用户名：{user.username}</div>
           <div>邮箱：{user.email}</div>
@@ -41,6 +60,20 @@ export default async function AccountPage() {
             注册时间：{new Date(user.createdAt).toLocaleString("zh-CN")}
           </div>
         </div>
+      </div>
+
+      {/* Edit profile */}
+      <div className="card mb-6 space-y-4">
+        <h2 className="text-base font-semibold text-primary-700">个人资料</h2>
+        <ProfileEditForm
+          initialData={{
+            bio: user.bio || "",
+            website: user.website || "",
+            location: user.location || "",
+            github: user.github || "",
+            twitter: user.twitter || "",
+          }}
+        />
       </div>
 
       {/* Change password */}

@@ -15,7 +15,10 @@ async function cleanOrphanTags() {
 
 export async function createPost(formData: FormData) {
   const session = await auth();
-  if (!session || (session.user as any)?.role !== "ADMIN") return { success: false, error: "无权限" };
+  if (!session?.user) return { success: false, error: "请先登录" };
+
+  const isAdmin = (session.user as any).role === "ADMIN";
+  const userId = (session.user as any).id;
 
   const title = formData.get("title") as string;
   const content = formData.get("content") as string;
@@ -29,7 +32,8 @@ export async function createPost(formData: FormData) {
   const existing = await prisma.post.findUnique({ where: { slug } });
   if (existing) slug += "-" + Date.now().toString(36);
 
-  const userId = (session.user as any).id;
+  // Non-admin users can only create drafts
+  const finalStatus = isAdmin ? status : "DRAFT";
 
   await prisma.post.create({
     data: {
@@ -38,7 +42,7 @@ export async function createPost(formData: FormData) {
       content,
       category,
       excerpt: excerpt || null,
-      status,
+      status: finalStatus,
       authorId: userId,
       tags: {
         create: await Promise.all(
@@ -56,13 +60,21 @@ export async function createPost(formData: FormData) {
   });
 
   revalidatePath("/admin/posts");
+  revalidatePath("/my-posts");
   revalidatePath("/");
-  redirect("/admin/posts");
+  redirect(isAdmin ? "/admin/posts" : "/my-posts");
 }
 
 export async function updatePost(id: string, formData: FormData) {
   const session = await auth();
-  if ((session?.user as any)?.role !== "ADMIN") return { success: false, error: "无权限" };
+  if (!session?.user) return { success: false, error: "请先登录" };
+
+  const isAdmin = (session.user as any).role === "ADMIN";
+  const userId = (session.user as any).id;
+
+  const post = await prisma.post.findUnique({ where: { id } });
+  if (!post) return { success: false, error: "文章不存在" };
+  if (!isAdmin && post.authorId !== userId) return { success: false, error: "无权限" };
 
   const title = formData.get("title") as string;
   const content = formData.get("content") as string;
@@ -70,23 +82,35 @@ export async function updatePost(id: string, formData: FormData) {
   const excerpt = formData.get("excerpt") as string;
   const status = formData.get("status") as string;
 
+  // Non-admin users can only save as draft
+  const finalStatus = isAdmin ? status : "DRAFT";
+
   await prisma.post.update({
     where: { id },
-    data: { title, content, category, excerpt: excerpt || null, status },
+    data: { title, content, category, excerpt: excerpt || null, status: finalStatus },
   });
 
   revalidatePath("/admin/posts");
+  revalidatePath("/my-posts");
   revalidatePath("/");
-  redirect("/admin/posts");
+  redirect(isAdmin ? "/admin/posts" : "/my-posts");
 }
 
 export async function deletePost(id: string) {
   const session = await auth();
-  if ((session?.user as any)?.role !== "ADMIN") return { success: false, error: "无权限" };
+  if (!session?.user) return { success: false, error: "请先登录" };
+
+  const isAdmin = (session.user as any).role === "ADMIN";
+  const userId = (session.user as any).id;
+
+  const post = await prisma.post.findUnique({ where: { id } });
+  if (!post) return { success: false, error: "文章不存在" };
+  if (!isAdmin && post.authorId !== userId) return { success: false, error: "无权限" };
 
   await deletePostWithCleanup(id);
   await cleanOrphanTags();
   revalidatePath("/admin/posts");
+  revalidatePath("/my-posts");
   revalidatePath("/");
   return { success: true };
 }

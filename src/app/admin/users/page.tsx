@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
+import Link from "next/link";
 import { ResetPasswordButton } from "@/components/ResetPasswordButton";
 import { DeleteUserButton } from "@/components/DeleteUserButton";
 
@@ -24,7 +25,7 @@ export default async function AdminUsersPage() {
           <div key={u.id} className="card">
             <div className="flex justify-between items-start">
               <div>
-                <span className="font-medium text-primary-800">{u.username}</span>
+                <Link href={`/user/${u.username}`} className="font-medium text-primary-800 hover:text-primary-600 transition-colors">{u.username}</Link>
                 <span className={`ml-2 text-xs px-2 py-0.5 rounded-full ${u.role === "ADMIN" ? "bg-gradient-to-br from-primary-500 to-primary-600 text-white" : "bg-primary-50 text-primary-600/60"}`}>
                   {u.role === "ADMIN" ? "管理员" : "读者"}
                 </span>

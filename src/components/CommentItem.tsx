@@ -1,6 +1,7 @@
 "use client";
 
 import { deleteComment } from "@/actions/comments";
+import Link from "next/link";
 
 interface CommentWithUser {
   id: string;
@@ -21,22 +22,22 @@ export function CommentItem({
 }: {
   comment: CommentWithUser;
   isAdmin: boolean;
-  onReply: (id: string | null) => void;
-  replyTo: string | null;
+  onReply: (id: string, username: string) => void;
+  replyTo: { id: string; username: string } | null;
   postId: string;
   depth?: number;
 }) {
   return (
     <div className={`${depth > 0 ? "ml-6 border-l-2 border-primary-200/30 pl-4" : ""} mb-4`}>
       <div className="flex items-center gap-2 text-sm mb-1">
-        <span className="font-medium text-primary-800">{comment.user.username}</span>
+        <Link href={`/user/${comment.user.username}`} className="font-medium text-primary-800 hover:text-primary-600 transition-colors">{comment.user.username}</Link>
         <span className="text-primary-600/60 text-xs">
           {new Date(comment.createdAt).toLocaleDateString("zh-CN")}
         </span>
       </div>
       <p className="text-sm text-primary-800 mb-2">{comment.content}</p>
       <div className="flex gap-2 text-xs">
-        <button onClick={() => onReply(comment.id)} className="text-primary-500 hover:underline">
+        <button onClick={() => onReply(comment.id, comment.user.username)} className="text-primary-500 hover:underline">
           回复
         </button>
         {isAdmin && (

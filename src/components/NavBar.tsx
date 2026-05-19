@@ -7,6 +7,7 @@ import { LogoutButton } from "./LogoutButton";
 
 interface NavBarProps {
   isAdmin: boolean;
+  isLoggedIn: boolean;
   userName: string | null;
 }
 
@@ -19,7 +20,7 @@ const navLinks = [
   { href: "/about", label: "关于" },
 ];
 
-export function NavBar({ isAdmin, userName }: NavBarProps) {
+export function NavBar({ isAdmin, isLoggedIn, userName }: NavBarProps) {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
 
@@ -71,11 +72,35 @@ export function NavBar({ isAdmin, userName }: NavBarProps) {
             );
           })}
 
+          {/* Write post — logged-in users */}
+          {isLoggedIn && (
+            <Link
+              href={isAdmin ? "/admin/posts/new" : "/my-posts/new"}
+              className="ml-1 px-3 py-1.5 text-xs font-semibold rounded-lg bg-primary-600 text-white hover:bg-primary-700 transition-colors"
+            >
+              写文章
+            </Link>
+          )}
+
+          {/* My posts — non-admin users */}
+          {isLoggedIn && !isAdmin && (
+            <Link
+              href="/my-posts"
+              className={`px-3 py-1.5 text-xs font-semibold rounded-lg transition-colors ${
+                pathname.startsWith("/my-posts")
+                  ? "bg-primary-500 text-white"
+                  : "bg-primary-100 text-primary-700 hover:bg-primary-200"
+              }`}
+            >
+              我的文章
+            </Link>
+          )}
+
           {/* Admin link */}
           {isAdmin && (
             <Link
               href="/admin"
-              className={`ml-1 px-3 py-1.5 text-xs font-semibold rounded-lg transition-colors ${
+              className={`px-3 py-1.5 text-xs font-semibold rounded-lg transition-colors ${
                 pathname.startsWith("/admin")
                   ? "bg-primary-500 text-white"
                   : "bg-primary-100 text-primary-700 hover:bg-primary-200"
@@ -188,6 +213,28 @@ export function NavBar({ isAdmin, userName }: NavBarProps) {
               </Link>
             );
           })}
+
+          {isLoggedIn && (
+            <Link
+              href={isAdmin ? "/admin/posts/new" : "/my-posts/new"}
+              className="mt-2 block px-4 py-3 rounded-xl text-base font-semibold bg-primary-600 text-white hover:bg-primary-700 transition-colors"
+            >
+              写文章
+            </Link>
+          )}
+
+          {isLoggedIn && !isAdmin && (
+            <Link
+              href="/my-posts"
+              className={`mt-2 block px-4 py-3 rounded-xl text-base font-semibold transition-colors ${
+                pathname.startsWith("/my-posts")
+                  ? "bg-primary-500 text-white"
+                  : "bg-primary-100 text-primary-700"
+              }`}
+            >
+              我的文章
+            </Link>
+          )}
 
           {isAdmin && (
             <Link

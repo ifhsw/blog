@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { deleteCommentAction } from "@/actions/comments";
+import Link from "next/link";
 
 export default async function AdminCommentsPage() {
   const comments = await prisma.comment.findMany({
@@ -22,7 +23,7 @@ export default async function AdminCommentsPage() {
             <div className="flex-1">
               <p className="text-sm text-primary-800">{c.content}</p>
               <div className="text-xs text-primary-600/60 mt-1">
-                {c.user.username} · 在 <a href={`/post/${c.post.slug}`} className="text-primary-500 hover:underline">{c.post.title}</a> · {new Date(c.createdAt).toLocaleString("zh-CN")}
+                <Link href={`/user/${c.user.username}`} className="hover:underline">{c.user.username}</Link> · 在 <Link href={`/post/${c.post.slug}`} className="text-primary-500 hover:underline">{c.post.title}</Link> · {new Date(c.createdAt).toLocaleString("zh-CN")}
               </div>
             </div>
             <form action={deleteCommentAction}>
