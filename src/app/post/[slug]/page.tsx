@@ -10,6 +10,7 @@ import { TableOfContents } from "@/components/TableOfContents";
 import { ShareButtons } from "@/components/ShareButtons";
 import { ImageViewer } from "@/components/ImageViewer";
 import { BackButton } from "@/components/BackButton";
+import { Avatar } from "@/components/Avatar";
 
 function estimateReadingTime(text: string): number {
   const wordsPerMinute = 300; // Chinese characters per minute
@@ -22,7 +23,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
   const post = await prisma.post.findUnique({
     where: { slug },
     include: {
-      author: { select: { username: true } },
+      author: { select: { username: true, avatar: true } },
       tags: { include: { tag: true } },
     },
   });
@@ -118,9 +119,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
 
               {/* Author row */}
               <div className="mt-5 flex items-center gap-3 pb-6 border-b border-primary-200/30">
-                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary-300 to-primary-500 flex items-center justify-center text-white text-sm font-bold shadow-sm shrink-0">
-                  {post.author.username[0].toUpperCase()}
-                </div>
+                <Avatar src={post.author.avatar || null} name={post.author.username} size="md" />
                 <div className="min-w-0">
                   <Link href={`/user/${post.author.username}`} className="text-sm font-semibold text-primary-800 hover:text-primary-600 transition-colors">
                     {post.author.username}
@@ -189,9 +188,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
 
               {/* Author card */}
               <div className="card !p-5 flex items-start gap-4 mt-4">
-                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-primary-300 to-primary-500 flex items-center justify-center text-white text-lg font-bold shadow-sm shrink-0">
-                  {post.author.username[0].toUpperCase()}
-                </div>
+                <Avatar src={post.author.avatar || null} name={post.author.username} size="md" />
                 <div>
                   <div className="font-semibold text-primary-800 text-sm">
                     {post.author.username}
