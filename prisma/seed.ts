@@ -42,7 +42,13 @@ async function main() {
       title: "欢迎来到我的博客",
       slug: "hello-world",
       excerpt: "这是我的第一篇文章",
-      content: `## 你好\n\n这是第一篇博客文章。欢迎来访。`,
+      content: JSON.stringify({
+        type: "doc",
+        content: [
+          { type: "heading", attrs: { level: 2 }, content: [{ type: "text", text: "你好" }] },
+          { type: "paragraph", content: [{ type: "text", text: "这是第一篇博客文章。欢迎来访。" }] },
+        ],
+      }),
       category: "ESSAY",
       status: "PUBLISHED",
       authorId: admin.id,
