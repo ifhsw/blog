@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
 import { Avatar } from "@/components/Avatar";
 import { LogoutButton } from "./LogoutButton";
+import { ThemeToggle } from "@/components/ThemeToggle";
 
 interface NavBarProps {
   isAdmin: boolean;
@@ -129,6 +130,9 @@ export function NavBar({ isAdmin, isLoggedIn, userName, userAvatar }: NavBarProp
           <a href="/rss.xml" target="_blank" rel="noopener noreferrer" className="text-xs text-primary-400/50 hover:text-primary-600 transition-colors mx-2" title="RSS 订阅">
             RSS
           </a>
+
+          {/* Theme toggle */}
+          <ThemeToggle />
 
           {/* Divider */}
           <div className="mx-2 h-5 w-px bg-primary-200/60" />

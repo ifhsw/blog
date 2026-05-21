@@ -4,6 +4,7 @@ import { SessionProvider } from "next-auth/react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { getSiteSetting } from "@/actions/settings";
+import { ThemeProvider } from "@/components/ThemeProvider";
 
 export const dynamic = "force-dynamic";
 
@@ -20,7 +21,7 @@ export default async function RootLayout({
   const bgUrl = await getSiteSetting("background");
 
   return (
-    <html lang="zh-CN">
+    <html lang="zh-CN" suppressHydrationWarning>
       <body className="bg-primary-50 text-primary-800 min-h-screen flex flex-col">
         {bgUrl && (
           <style>{`body::before{background-image:url('${bgUrl}')}`}</style>
@@ -32,13 +33,15 @@ export default async function RootLayout({
         >
           跳到主要内容
         </a>
-        <SessionProvider>
-          <Header />
-          <div id="main-content" className="flex-1 flex flex-col">
-            {children}
-          </div>
-          <Footer />
-        </SessionProvider>
+        <ThemeProvider>
+          <SessionProvider>
+            <Header />
+            <div id="main-content" className="flex-1 flex flex-col">
+              {children}
+            </div>
+            <Footer />
+          </SessionProvider>
+        </ThemeProvider>
       </body>
     </html>
   );
