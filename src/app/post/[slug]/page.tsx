@@ -19,6 +19,29 @@ function estimateReadingTime(text: string): number {
   return Math.max(1, Math.ceil(chars / wordsPerMinute));
 }
 
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
+  const post = await prisma.post.findUnique({
+    where: { slug },
+    select: { title: true, seoTitle: true, seoDesc: true, excerpt: true, coverImage: true },
+  });
+  if (!post) return { title: "页面未找到" };
+
+  const title = post.seoTitle || post.title;
+  const description = post.seoDesc || post.excerpt || "";
+
+  return {
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      type: "article",
+      images: post.coverImage ? [{ url: post.coverImage }] : [],
+    },
+  };
+}
+
 export default async function PostPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const post = await prisma.post.findUnique({
