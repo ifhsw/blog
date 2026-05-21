@@ -1,6 +1,7 @@
 "use client";
 
 import { deleteComment } from "@/actions/comments";
+import { Avatar } from "@/components/Avatar";
 import Link from "next/link";
 
 interface CommentWithUser {
@@ -30,6 +31,7 @@ export function CommentItem({
   return (
     <div className={`${depth > 0 ? "ml-6 border-l-2 border-primary-200/30 pl-4" : ""} mb-4`}>
       <div className="flex items-center gap-2 text-sm mb-1">
+        <Avatar src={comment.user.avatar} name={comment.user.username} size="sm" />
         <Link href={`/user/${comment.user.username}`} className="font-medium text-primary-800 hover:text-primary-600 transition-colors">{comment.user.username}</Link>
         <span className="text-primary-600/60 text-xs">
           {new Date(comment.createdAt).toLocaleDateString("zh-CN")}
