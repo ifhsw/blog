@@ -20,6 +20,7 @@ const navLinks = [
   { href: "/archive", label: "归档" },
   { href: "/qa", label: "问答" },
   { href: "/about", label: "关于" },
+  { href: "/links", label: "友链" },
 ];
 
 export function NavBar({ isAdmin, isLoggedIn, userName, userAvatar }: NavBarProps) {
@@ -123,6 +124,11 @@ export function NavBar({ isAdmin, isLoggedIn, userName, userAvatar }: NavBarProp
                          focus:outline-none focus:border-primary-300 focus:w-40 transition-all duration-200"
             />
           </form>
+
+          {/* RSS */}
+          <a href="/rss.xml" target="_blank" rel="noopener noreferrer" className="text-xs text-primary-400/50 hover:text-primary-600 transition-colors mx-2" title="RSS 订阅">
+            RSS
+          </a>
 
           {/* Divider */}
           <div className="mx-2 h-5 w-px bg-primary-200/60" />
