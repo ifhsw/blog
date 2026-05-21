@@ -6,7 +6,11 @@ export default async function HomePage() {
   const posts = await prisma.post.findMany({
     where: { status: "PUBLISHED", visibility: "PUBLIC" },
     orderBy: { createdAt: "desc" },
-    include: { tags: { include: { tag: true } } },
+    select: {
+      id: true, title: true, slug: true, excerpt: true, category: true,
+      createdAt: true, wordCount: true,
+      tags: { select: { tag: { select: { name: true } } } },
+    },
   });
 
   return (
@@ -75,7 +79,7 @@ export default async function HomePage() {
                     className="animate-fade-in-up"
                     style={{ animationDelay: `${i * 80}ms` }}
                   >
-                    <PostCard {...post} featured={i === 0} />
+                    <PostCard {...post} wordCount={post.wordCount} featured={i === 0} />
                   </div>
                 ))}
               </div>

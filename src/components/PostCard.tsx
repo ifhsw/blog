@@ -8,6 +8,7 @@ interface PostCardProps {
   category: string;
   createdAt: Date;
   tags: { tag: { name: string } }[];
+  wordCount?: number | null;
   featured?: boolean;
 }
 
@@ -19,6 +20,7 @@ export function PostCard({
   category,
   createdAt,
   tags,
+  wordCount,
   featured = false,
 }: PostCardProps) {
   const isTech = category === "TECH";
@@ -43,6 +45,14 @@ export function PostCard({
               day: "numeric",
             })}
           </span>
+          {wordCount != null && (
+            <>
+              <span className="text-xs text-primary-400/35">·</span>
+              <span className="text-xs text-primary-400/50">
+                {Math.max(1, Math.ceil(wordCount / 300))} 分钟阅读
+              </span>
+            </>
+          )}
         </div>
 
         {/* Title */}
