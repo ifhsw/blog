@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import { Avatar } from "@/components/Avatar";
 
 export default async function UserProfilePage({
   params,
@@ -47,9 +48,7 @@ export default async function UserProfilePage({
       <div className="card mb-8">
         <div className="flex items-start gap-5">
           {/* Avatar */}
-          <div className="w-20 h-20 rounded-full bg-gradient-to-br from-primary-400 to-primary-600 flex items-center justify-center text-white text-2xl font-bold shrink-0">
-            {user.username.charAt(0).toUpperCase()}
-          </div>
+          <Avatar src={user.avatar} name={user.username} size="lg" />
 
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2 flex-wrap">
