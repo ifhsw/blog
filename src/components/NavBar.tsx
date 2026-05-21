@@ -3,12 +3,14 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
+import { Avatar } from "@/components/Avatar";
 import { LogoutButton } from "./LogoutButton";
 
 interface NavBarProps {
   isAdmin: boolean;
   isLoggedIn: boolean;
   userName: string | null;
+  userAvatar: string | null;
 }
 
 const navLinks = [
@@ -20,7 +22,7 @@ const navLinks = [
   { href: "/about", label: "关于" },
 ];
 
-export function NavBar({ isAdmin, isLoggedIn, userName }: NavBarProps) {
+export function NavBar({ isAdmin, isLoggedIn, userName, userAvatar }: NavBarProps) {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
 
@@ -128,11 +130,11 @@ export function NavBar({ isAdmin, isLoggedIn, userName }: NavBarProps) {
           {/* Auth */}
           {userName ? (
             <span className="flex items-center gap-2 text-sm text-primary-600/80">
-              <Link
-                href="/account"
-                className="hidden sm:inline text-xs font-medium text-primary-600/50 hover:text-primary-700 transition-colors"
-              >
-                {userName}
+              <Link href="/account" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
+                <Avatar src={userAvatar} name={userName} size="sm" />
+                <span className="hidden sm:inline text-xs font-medium text-primary-600/50 hover:text-primary-700 transition-colors">
+                  {userName}
+                </span>
               </Link>
               <LogoutButton />
             </span>
@@ -251,11 +253,11 @@ export function NavBar({ isAdmin, isLoggedIn, userName }: NavBarProps) {
 
           {userName && (
             <div className="mt-4 pt-4 border-t border-primary-200/30 px-4">
-              <Link
-                href="/account"
-                className="block text-sm text-primary-600/70 hover:text-primary-800 transition-colors mb-2"
-              >
-                {userName}
+              <Link href="/account" className="flex items-center gap-3 mb-2">
+                <Avatar src={userAvatar} name={userName} size="sm" />
+                <span className="text-sm text-primary-600/70 hover:text-primary-800 transition-colors">
+                  {userName}
+                </span>
               </Link>
               <LogoutButton />
             </div>
