@@ -65,6 +65,19 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
     select: { title: true, slug: true, createdAt: true },
   });
 
+  const [prevPost, nextPost] = await Promise.all([
+    prisma.post.findFirst({
+      where: { status: "PUBLISHED", visibility: "PUBLIC", createdAt: { lt: post.createdAt } },
+      orderBy: { createdAt: "desc" },
+      select: { title: true, slug: true },
+    }),
+    prisma.post.findFirst({
+      where: { status: "PUBLISHED", visibility: "PUBLIC", createdAt: { gt: post.createdAt } },
+      orderBy: { createdAt: "asc" },
+      select: { title: true, slug: true },
+    }),
+  ]);
+
   return (
     <>
       <ReadingProgress />
@@ -199,6 +212,24 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
                 </div>
               </div>
             </footer>
+
+            {/* Prev/Next navigation */}
+            {(prevPost || nextPost) && (
+              <div className="flex gap-4 mt-6">
+                {prevPost ? (
+                  <Link href={`/post/${prevPost.slug}`} className="flex-1 p-4 rounded-xl border border-primary-200/30 hover:bg-primary-50/50 transition-colors group">
+                    <div className="text-xs text-primary-400/50 mb-1">← 上一篇</div>
+                    <div className="text-sm font-medium text-primary-700 group-hover:text-primary-900 transition-colors line-clamp-1">{prevPost.title}</div>
+                  </Link>
+                ) : <div className="flex-1" />}
+                {nextPost ? (
+                  <Link href={`/post/${nextPost.slug}`} className="flex-1 p-4 rounded-xl border border-primary-200/30 hover:bg-primary-50/50 transition-colors group text-right">
+                    <div className="text-xs text-primary-400/50 mb-1">下一篇 →</div>
+                    <div className="text-sm font-medium text-primary-700 group-hover:text-primary-900 transition-colors line-clamp-1">{nextPost.title}</div>
+                  </Link>
+                ) : <div className="flex-1" />}
+              </div>
+            )}
 
           </article>
 
