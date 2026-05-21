@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { generateHTML } from "@tiptap/core";
 import StarterKit from "@tiptap/starter-kit";
 import { Table } from "@tiptap/extension-table";
@@ -34,6 +34,7 @@ const extensions = [
 
 export function PostContent({ content }: { content: string }) {
   const [html, setHtml] = useState<string>("");
+  const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     try {
@@ -45,8 +46,40 @@ export function PostContent({ content }: { content: string }) {
     }
   }, [content]);
 
+  useEffect(() => {
+    if (!html) return;
+    const container = containerRef.current;
+    if (!container) return;
+
+    requestAnimationFrame(() => {
+      const pres = container.querySelectorAll("pre");
+      pres.forEach((pre) => {
+        if (pre.querySelector(".copy-btn")) return;
+        const wrapper = document.createElement("div");
+        wrapper.style.position = "relative";
+        pre.parentNode?.insertBefore(wrapper, pre);
+        wrapper.appendChild(pre);
+
+        const btn = document.createElement("button");
+        btn.className = "copy-btn";
+        btn.textContent = "复制";
+        btn.style.cssText = "position:absolute;top:8px;right:8px;padding:4px 10px;font-size:11px;background:rgba(255,255,255,0.1);color:#999;border:1px solid rgba(255,255,255,0.15);border-radius:4px;cursor:pointer;opacity:0;transition:opacity 0.2s;";
+        btn.onclick = async () => {
+          const code = pre.querySelector("code")?.textContent || "";
+          await navigator.clipboard.writeText(code);
+          btn.textContent = "已复制!";
+          setTimeout(() => (btn.textContent = "复制"), 2000);
+        };
+        wrapper.appendChild(btn);
+        wrapper.onmouseenter = () => (btn.style.opacity = "1");
+        wrapper.onmouseleave = () => (btn.style.opacity = "0");
+      });
+    });
+  }, [html]);
+
   return (
     <div
+      ref={containerRef}
       className="py-8 animate-fade-in animation-delay-200 prose prose-lg max-w-none
         [&_img]:max-w-full [&_img]:rounded-lg
         [&_pre]:bg-[#1e1e2e] [&_pre]:text-gray-300 [&_pre]:p-4 [&_pre]:rounded-lg
