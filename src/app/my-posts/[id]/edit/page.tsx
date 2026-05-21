@@ -15,15 +15,13 @@ export default async function EditMyPostPage({ params }: { params: Promise<{ id:
     include: { tags: { include: { tag: true } } },
   });
   if (!post) notFound();
-
-  // Only author or admin can edit
   if (!isAdmin && post.authorId !== userId) redirect("/my-posts");
 
+  const tagSuggestions = (await prisma.tag.findMany({ select: { name: true } })).map((t) => t.name);
   const bindUpdate = updatePost.bind(null, post.id);
 
   return (
     <div>
-      <h1 className="text-2xl font-bold text-primary-800 mb-6">编辑文章</h1>
       <PostEditor
         action={bindUpdate}
         initialData={{
@@ -33,11 +31,17 @@ export default async function EditMyPostPage({ params }: { params: Promise<{ id:
           category: post.category,
           status: post.status,
           visibility: post.visibility,
-          tags: post.tags.map((pt: (typeof post.tags)[number]) => pt.tag.name).join(", "),
+          tags: post.tags.map((pt) => pt.tag.name).join(", "),
+          coverImage: post.coverImage || "",
+          seoTitle: post.seoTitle || "",
+          seoDesc: post.seoDesc || "",
+          scheduledAt: post.scheduledAt ? new Date(post.scheduledAt).toISOString().slice(0, 16) : "",
         }}
         submitLabel="保存"
         showStatus={isAdmin}
         showVisibility={true}
+        tagSuggestions={tagSuggestions}
+        postId={post.id}
       />
     </div>
   );

@@ -1,11 +1,13 @@
 import { createPost } from "@/actions/posts";
 import { PostEditor } from "@/components/PostEditor";
+import { prisma } from "@/lib/prisma";
 
-export default function NewPostPage() {
+export default async function NewPostPage() {
+  const tagSuggestions = (await prisma.tag.findMany({ select: { name: true } })).map((t) => t.name);
+
   return (
     <div>
-      <h1 className="text-2xl font-bold text-primary-800 mb-6">写文章</h1>
-      <PostEditor action={createPost} submitLabel="发布" showVisibility={true} />
+      <PostEditor action={createPost} submitLabel="发布" showVisibility={true} tagSuggestions={tagSuggestions} />
     </div>
   );
 }
