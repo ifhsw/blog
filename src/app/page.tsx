@@ -1,19 +1,29 @@
 import { prisma } from "@/lib/prisma";
 import { PostCard } from "@/components/PostCard";
 import { Sidebar } from "@/components/Sidebar";
+import { Pagination } from "@/components/Pagination";
 
-export default async function HomePage() {
-  const posts = await prisma.post.findMany({
-    where: { status: "PUBLISHED", visibility: "PUBLIC" },
-    orderBy: { createdAt: "desc" },
-    select: {
-      id: true, title: true, slug: true, excerpt: true, category: true,
-      createdAt: true, wordCount: true,
-      tags: { select: { tag: { select: { name: true } } } },
-    },
-  });
+export default async function HomePage({
+  searchParams,
+}: {
+  searchParams: Promise<{ page?: string }>;
+}) {
+  const { page } = await searchParams;
+  const currentPage = Math.max(1, parseInt(page || "1", 10));
+  const pageSize = 10;
 
-  const [postCount, tagCount, commentCount] = await Promise.all([
+  const [posts, totalCount, tagCount, commentCount] = await Promise.all([
+    prisma.post.findMany({
+      where: { status: "PUBLISHED", visibility: "PUBLIC" },
+      orderBy: { createdAt: "desc" },
+      select: {
+        id: true, title: true, slug: true, excerpt: true, category: true,
+        createdAt: true, wordCount: true,
+        tags: { select: { tag: { select: { name: true } } } },
+      },
+      skip: (currentPage - 1) * pageSize,
+      take: pageSize,
+    }),
     prisma.post.count({ where: { status: "PUBLISHED", visibility: "PUBLIC" } }),
     prisma.tag.count(),
     prisma.comment.count(),
@@ -39,7 +49,7 @@ export default async function HomePage() {
               冷灰、苍蓝、低饱和。技术笔记与随想，在静谧中沉淀。
             </p>
             <div className="mt-8 flex flex-wrap items-center gap-6 text-sm text-primary-700/60 animate-fade-in-up animation-delay-150">
-              <span>📝 <strong className="text-primary-900 font-semibold">{postCount}</strong> 篇文章</span>
+              <span>📝 <strong className="text-primary-900 font-semibold">{totalCount}</strong> 篇文章</span>
               <span>🏷 <strong className="text-primary-900 font-semibold">{tagCount}</strong> 个标签</span>
               <span>💬 <strong className="text-primary-900 font-semibold">{commentCount}</strong> 条评论</span>
             </div>
@@ -95,6 +105,8 @@ export default async function HomePage() {
                 ))}
               </div>
             )}
+
+            <Pagination currentPage={currentPage} totalPages={Math.ceil(totalCount / pageSize)} />
           </div>
 
           {/* Sidebar */}
