@@ -13,6 +13,12 @@ export default async function HomePage() {
     },
   });
 
+  const [postCount, tagCount, commentCount] = await Promise.all([
+    prisma.post.count({ where: { status: "PUBLISHED", visibility: "PUBLIC" } }),
+    prisma.tag.count(),
+    prisma.comment.count(),
+  ]);
+
   return (
     <main className="flex-1">
       {/* Hero section — inspired by Stripe/Vercel */}
@@ -32,6 +38,11 @@ export default async function HomePage() {
             <p className="mt-6 text-lg md:text-xl text-primary-900/60 leading-relaxed max-w-xl animate-fade-in-up animation-delay-100">
               冷灰、苍蓝、低饱和。技术笔记与随想，在静谧中沉淀。
             </p>
+            <div className="mt-8 flex flex-wrap items-center gap-6 text-sm text-primary-700/60 animate-fade-in-up animation-delay-150">
+              <span>📝 <strong className="text-primary-900 font-semibold">{postCount}</strong> 篇文章</span>
+              <span>🏷 <strong className="text-primary-900 font-semibold">{tagCount}</strong> 个标签</span>
+              <span>💬 <strong className="text-primary-900 font-semibold">{commentCount}</strong> 条评论</span>
+            </div>
             <div className="mt-8 flex items-center gap-4 animate-fade-in-up animation-delay-200">
               <a
                 href="/tech"
