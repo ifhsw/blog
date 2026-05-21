@@ -8,6 +8,7 @@ import { ReadingProgress } from "@/components/ReadingProgress";
 import { BackToTop } from "@/components/BackToTop";
 import { TableOfContents } from "@/components/TableOfContents";
 import { ShareButtons } from "@/components/ShareButtons";
+import { MobileToc } from "@/components/MobileToc";
 import { ImageViewer } from "@/components/ImageViewer";
 import { BackButton } from "@/components/BackButton";
 import { Avatar } from "@/components/Avatar";
@@ -281,6 +282,9 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
           </aside>
         </div>
         </div>
+
+        {/* ---- Mobile Floating TOC ---- */}
+        <MobileToc content={post.content} />
 
         {/* ---- Floating Comment Drawer ---- */}
         <CommentDrawer postId={post.id} comments={comments} />
