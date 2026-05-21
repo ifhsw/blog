@@ -96,12 +96,3 @@ export async function cleanOrphanUploads(): Promise<number> {
 
   return orphans.length;
 }
-
-/**
- * Clean up uploads that were superseded by post edits.
- * Finds all referenced uploads in current posts, deletes the rest.
- */
-export async function cleanOrphanUploadsAction(): Promise<{ cleaned: number }> {
-  const count = await cleanOrphanUploads();
-  return { cleaned: count };
-}
