@@ -21,7 +21,6 @@ const navLinks = [
   { href: "/archive", label: "归档" },
   { href: "/qa", label: "问答" },
   { href: "/about", label: "关于" },
-  { href: "/links", label: "友链" },
 ];
 
 export function NavBar({ isAdmin, isLoggedIn, userName, userAvatar }: NavBarProps) {

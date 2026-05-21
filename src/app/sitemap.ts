@@ -8,7 +8,7 @@ export default async function sitemap() {
     select: { slug: true, updatedAt: true },
   });
 
-  const staticRoutes = ["", "/tech", "/essay", "/archive", "/about", "/qa", "/links"];
+  const staticRoutes = ["", "/tech", "/essay", "/archive", "/about", "/qa"];
 
   return [
     ...staticRoutes.map((route) => ({
