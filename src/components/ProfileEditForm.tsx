@@ -1,7 +1,10 @@
+// src/components/ProfileEditForm.tsx
 "use client";
 
 import { useState } from "react";
 import { updateProfile } from "@/actions/profile";
+import { Avatar } from "@/components/Avatar";
+import { AvatarCropModal } from "@/components/AvatarCropModal";
 
 interface Props {
   initialData: {
@@ -10,18 +13,23 @@ interface Props {
     location: string;
     github: string;
     twitter: string;
+    avatar?: string | null;
   };
+  username: string;
 }
 
-export function ProfileEditForm({ initialData }: Props) {
+export function ProfileEditForm({ initialData, username }: Props) {
   const [saved, setSaved] = useState(false);
   const [error, setError] = useState("");
+  const [avatarUrl, setAvatarUrl] = useState<string | null>(initialData.avatar || null);
+  const [cropOpen, setCropOpen] = useState(false);
 
   return (
     <form
       action={async (formData) => {
         setSaved(false);
         setError("");
+        if (avatarUrl) formData.set("avatar", avatarUrl);
         const result = await updateProfile(formData);
         if (result.success) {
           setSaved(true);
@@ -32,6 +40,27 @@ export function ProfileEditForm({ initialData }: Props) {
       }}
       className="space-y-4"
     >
+      {/* Avatar */}
+      <div>
+        <label className="block text-sm font-medium text-primary-600/60 mb-2">头像</label>
+        <button
+          type="button"
+          onClick={() => setCropOpen(true)}
+          className="group relative rounded-full overflow-hidden ring-2 ring-primary-200/50 hover:ring-primary-400/50 transition-all"
+        >
+          <Avatar src={avatarUrl} name={username} size="lg" />
+          <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+            <span className="text-white text-xs font-medium">更换</span>
+          </div>
+        </button>
+      </div>
+
+      <AvatarCropModal
+        isOpen={cropOpen}
+        onClose={() => setCropOpen(false)}
+        onSave={(url) => { setAvatarUrl(url); setCropOpen(false); }}
+      />
+
       <div>
         <label className="block text-sm font-medium text-primary-600/60 mb-1">个人简介</label>
         <textarea
