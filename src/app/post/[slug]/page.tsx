@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
-import { compileMdx } from "@/lib/mdx";
+import { renderPostContent } from "@/lib/editor/render";
+import { sanitizeHtmlContent } from "@/lib/sanitize";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { CommentDrawer } from "@/components/CommentDrawer";
@@ -39,10 +40,18 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
     if (!isAuthor && !isAdmin) notFound();
   }
 
-  const mdxContent = await compileMdx(post.content);
-  const readingTime = estimateReadingTime(post.content);
+  let htmlContent: string;
+  try {
+    const json = JSON.parse(post.content);
+    htmlContent = sanitizeHtmlContent(renderPostContent(json));
+  } catch {
+    htmlContent = sanitizeHtmlContent(post.content);
+  }
+  const readingTime = post.wordCount
+    ? Math.max(1, Math.ceil(post.wordCount / 300))
+    : estimateReadingTime(post.content);
   const isTech = post.category === "TECH";
-  const wordCount = post.content.replace(/\s/g, "").length;
+  const wordCount = post.wordCount || post.content.replace(/\s/g, "").length;
 
   const comments = await prisma.comment.findMany({
     where: { postId: post.id },
@@ -140,10 +149,16 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
               </div>
             )}
 
-            {/* ---- MDX Content ---- */}
-            <div className="py-8 animate-fade-in animation-delay-200">
-              {mdxContent}
-            </div>
+            {/* ---- Article Content ---- */}
+            <div
+              className="py-8 animate-fade-in animation-delay-200 prose prose-lg max-w-none
+    [&_img]:max-w-full [&_img]:rounded-lg
+    [&_pre]:bg-[#1e1e2e] [&_pre]:text-gray-300 [&_pre]:p-4 [&_pre]:rounded-lg
+    [&_code]:font-mono [&_code]:text-sm
+    [&_table]:w-full [&_th]:border [&_td]:border [&_th]:p-2 [&_td]:p-2
+    [&_blockquote]:border-l-2 [&_blockquote]:border-blue-400 [&_blockquote]:pl-4 [&_blockquote]:text-gray-600"
+              dangerouslySetInnerHTML={{ __html: htmlContent }}
+            />
 
             {/* ---- Article Footer ---- */}
             <footer className="border-t border-primary-200/30 pt-6 pb-4 space-y-5">
