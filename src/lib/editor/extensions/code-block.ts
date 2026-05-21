@@ -5,7 +5,7 @@ import { toHtml } from "hast-util-to-html";
 
 const lowlight = createLowlight(common);
 
-export const CodeBlock = CodeBlockLowlight.extend({
+export const CodeBlock = CodeBlockLowlight.configure({ lowlight }).extend({
   addAttributes() {
     return {
       ...this.parent?.(),

@@ -1,7 +1,6 @@
 // src/lib/editor/render.ts
 import { generateHTML } from "@tiptap/core";
 import StarterKit from "@tiptap/starter-kit";
-import { Image } from "@tiptap/extension-image";
 import { Table } from "@tiptap/extension-table";
 import TableRow from "@tiptap/extension-table-row";
 import TableCell from "@tiptap/extension-table-cell";
@@ -9,8 +8,6 @@ import TableHeader from "@tiptap/extension-table-header";
 import TaskList from "@tiptap/extension-task-list";
 import TaskItem from "@tiptap/extension-task-item";
 import Highlight from "@tiptap/extension-highlight";
-import Underline from "@tiptap/extension-underline";
-import Link from "@tiptap/extension-link";
 import { Callout } from "./extensions/callout";
 import { CodeBlock } from "./extensions/code-block";
 import { ImageCaption } from "./extensions/image-caption";
@@ -21,7 +18,6 @@ const extensions = [
   Callout,
   CodeBlock,
   ImageCaption,
-  Image,
   MathInline,
   MathBlock,
   Table.configure({ resizable: true }),
@@ -31,8 +27,6 @@ const extensions = [
   TaskList,
   TaskItem.configure({ nested: true }),
   Highlight,
-  Underline,
-  Link.configure({ openOnClick: true }),
 ];
 
 export function renderPostContent(json: object): string {

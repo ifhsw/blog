@@ -1,7 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
-import { renderPostContent } from "@/lib/editor/render";
-import { sanitizeHtmlContent } from "@/lib/sanitize";
+import { PostContent } from "@/components/PostContent";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { CommentDrawer } from "@/components/CommentDrawer";
@@ -40,13 +39,6 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
     if (!isAuthor && !isAdmin) notFound();
   }
 
-  let htmlContent: string;
-  try {
-    const json = JSON.parse(post.content);
-    htmlContent = sanitizeHtmlContent(renderPostContent(json));
-  } catch {
-    htmlContent = sanitizeHtmlContent(post.content);
-  }
   const readingTime = post.wordCount
     ? Math.max(1, Math.ceil(post.wordCount / 300))
     : estimateReadingTime(post.content);
@@ -150,15 +142,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
             )}
 
             {/* ---- Article Content ---- */}
-            <div
-              className="py-8 animate-fade-in animation-delay-200 prose prose-lg max-w-none
-    [&_img]:max-w-full [&_img]:rounded-lg
-    [&_pre]:bg-[#1e1e2e] [&_pre]:text-gray-300 [&_pre]:p-4 [&_pre]:rounded-lg
-    [&_code]:font-mono [&_code]:text-sm
-    [&_table]:w-full [&_th]:border [&_td]:border [&_th]:p-2 [&_td]:p-2
-    [&_blockquote]:border-l-2 [&_blockquote]:border-blue-400 [&_blockquote]:pl-4 [&_blockquote]:text-gray-600"
-              dangerouslySetInnerHTML={{ __html: htmlContent }}
-            />
+            <PostContent content={post.content} />
 
             {/* ---- Article Footer ---- */}
             <footer className="border-t border-primary-200/30 pt-6 pb-4 space-y-5">
