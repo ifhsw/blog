@@ -125,10 +125,6 @@ export function NavBar({ isAdmin, isLoggedIn, userName, userAvatar }: NavBarProp
             />
           </form>
 
-          {/* RSS */}
-          <a href="/rss.xml" target="_blank" rel="noopener noreferrer" className="text-xs text-primary-400/50 hover:text-primary-600 transition-colors mx-2" title="RSS 订阅">
-            RSS
-          </a>
 
           {/* Theme toggle */}
           <ThemeToggle />
