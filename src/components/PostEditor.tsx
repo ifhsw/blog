@@ -2,10 +2,10 @@
 "use client";
 
 import { useState, useRef, useEffect, useCallback } from "react";
-import { useEditor, EditorContent, BubbleMenu } from "@tiptap/react";
+import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import { Image } from "@tiptap/extension-image";
-import Table from "@tiptap/extension-table";
+import { Table } from "@tiptap/extension-table";
 import TableRow from "@tiptap/extension-table-row";
 import TableCell from "@tiptap/extension-table-cell";
 import TableHeader from "@tiptap/extension-table-header";
@@ -332,21 +332,6 @@ export function PostEditor({
           <span className="text-xs text-primary-300/60 ml-auto">{characterCount.toLocaleString()} 字</span>
         </div>
       </div>
-
-      {/* Bubble Menu */}
-      {editor && (
-        <BubbleMenu editor={editor} className="flex gap-1 bg-white border border-primary-200/30 rounded-lg shadow-lg px-2 py-1.5">
-          <ToolBtn onClick={() => editor.chain().focus().toggleBold().run()} active={editor.isActive("bold")} label="B" />
-          <ToolBtn onClick={() => editor.chain().focus().toggleItalic().run()} active={editor.isActive("italic")} label="I" style="italic" />
-          <ToolBtn onClick={() => editor.chain().focus().toggleStrike().run()} active={editor.isActive("strike")} label="S" style="line-through" />
-          <span className="w-px h-4 bg-primary-200/30 self-center" />
-          <ToolBtn onClick={() => {
-            const url = window.prompt("URL:");
-            if (url) editor.chain().focus().setLink({ href: url }).run();
-          }} active={editor.isActive("link")} label="🔗" />
-          <ToolBtn onClick={() => editor.chain().focus().toggleCode().run()} active={editor.isActive("code")} label="&lt;&gt;" />
-        </BubbleMenu>
-      )}
 
       {/* Editor Content */}
       <div className="px-2 mb-4">

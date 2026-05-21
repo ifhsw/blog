@@ -1,6 +1,7 @@
 // src/lib/editor/extensions/code-block.ts
 import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
 import { common, createLowlight } from "lowlight";
+import { toHtml } from "hast-util-to-html";
 
 const lowlight = createLowlight(common);
 
@@ -18,7 +19,7 @@ export const CodeBlock = CodeBlockLowlight.extend({
   renderHTML({ node, HTMLAttributes }) {
     const lang = node.attrs.language || "plaintext";
     const tree = lowlight.highlight(lang, node.textContent);
-    const html = lowlight.toHtml(tree);
+    const html = toHtml(tree);
     return [
       "div",
       { class: "code-block-wrapper" },
