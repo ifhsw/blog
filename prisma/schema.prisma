@@ -34,6 +34,10 @@ model Post {
   category   String
   status     String    @default("DRAFT")
   visibility String    @default("PUBLIC")
+  seoTitle    String?
+  seoDesc     String?
+  scheduledAt DateTime?
+  wordCount   Int?
   authorId   String
   author     User      @relation(fields: [authorId], references: [id])
   createdAt  DateTime  @default(now())
