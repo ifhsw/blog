@@ -15,10 +15,11 @@ export async function updateProfile(formData: FormData) {
   const location = (formData.get("location") as string)?.trim() || null;
   const github = (formData.get("github") as string)?.trim() || null;
   const twitter = (formData.get("twitter") as string)?.trim() || null;
+const avatar = (formData.get("avatar") as string)?.trim() || null;
 
   await prisma.user.update({
     where: { id: userId },
-    data: { bio, website, location, github, twitter },
+    data: { bio, website, location, github, twitter, avatar },
   });
 
   revalidatePath("/account");

@@ -27,6 +27,7 @@ export default async function AccountPage() {
       location: true,
       github: true,
       twitter: true,
+      avatar: true,
     },
   });
   if (!user) redirect("/login");
@@ -73,7 +74,9 @@ export default async function AccountPage() {
             location: user.location || "",
             github: user.github || "",
             twitter: user.twitter || "",
+            avatar: user.avatar,
           }}
+          username={user.username}
         />
       </div>
 
