@@ -4,10 +4,30 @@ import { prisma } from "@/lib/prisma";
 
 const UPLOADS_DIR = path.join(process.cwd(), "public", "uploads");
 
-/** Extract all /uploads/ filenames from markdown/MDX content */
+/** Extract all /uploads/ filenames from TipTap JSON content */
 export function extractUploadFilenames(content: string): string[] {
-  const matches = content.matchAll(/\/uploads\/([^\s)"')\]>]+)/g);
-  return [...matches].map((m) => m[1]);
+  // Try to parse as JSON (TipTap format)
+  try {
+    const json = JSON.parse(content);
+    const urls: string[] = [];
+    const walk = (node: unknown) => {
+      if (!node || typeof node !== "object") return;
+      const obj = node as Record<string, unknown>;
+      if (typeof obj.src === "string" && obj.src.includes("/uploads/")) {
+        const match = obj.src.match(/\/uploads\/([^\s"')>]+)/);
+        if (match) urls.push(match[1]);
+      }
+      if (obj.content && Array.isArray(obj.content)) {
+        for (const child of obj.content) walk(child);
+      }
+    };
+    walk(json);
+    return urls;
+  } catch {
+    // Fallback: plain text/Markdown
+    const matches = content.matchAll(/\/uploads\/([^\s)"')\]>]+)/g);
+    return [...matches].map((m) => m[1]);
+  }
 }
 
 /** Delete specific upload files by filename */
